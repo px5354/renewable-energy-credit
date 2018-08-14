@@ -34,3 +34,16 @@ export const verifyCertificate = form => axios({
   data: build(form),
   config: { headers: { 'Content-Type': 'application/json' } },
 });
+
+export const getAssets = () => axios({
+  method: 'get',
+  baseURL: 'http://localhost:43056',
+  url: 'api/tracker/assets',
+});
+
+export const getTransactions = () => axios({
+  method: 'get',
+  baseURL: 'http://localhost:43056',
+  url: 'api/tracker/transactions',
+});
+

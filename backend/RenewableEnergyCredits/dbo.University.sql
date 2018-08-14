@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].University
+(
+	[Id] VARCHAR(50) NOT NULL PRIMARY KEY,
+	[ShortName] VARCHAR(50) NOT NULL,
+	[LongName] VARCHAR(100) NOT NULL
+)

@@ -86,6 +86,21 @@ namespace RenewableEnergyCredits.Controllers
             var transactions = await _mantleTracker.TrackerTransactionsSelfGetAsync();
             return Ok(transactions);
             //            return StatusCode(StatusCodes.Status200OK);
-        }        
+        }
+        /// <summary>
+        /// Get all of the assets that have been created in Tracker. Requires the Tracker Admin Role.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("balances")]
+//        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetBalances()
+        {
+//            var assets = await _mediator.Send(new GetAssetsQuery(token.ClientId));
+//            Console.WriteLine(greenCredit);
+            var balances = await _mantleTracker.TrackerWalletBalancesGetAsync();
+            return Ok(balances);
+            //            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 }

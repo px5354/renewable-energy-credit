@@ -15,24 +15,25 @@
       </md-toolbar>
 
       <md-list>
-        <md-list-item>
+        <!-- <md-list-item v-on:click="onClickPage">
+          <md-icon>move_to_inbox</md-icon>      
+          <span class="md-list-item-text">Home</span >
+        </md-list-item> -->
+
+        <md-list-item v-on:click="onClickPage('producer')">
           <md-icon>move_to_inbox</md-icon>
-          <span class="md-list-item-text"><router-link to="/">Home</router-link></span>
+          <!-- <span class="md-list-item-text"><router-link to="/producer">Producer</router-link></span> -->
+          <span class="md-list-item-text">Producer</span >
         </md-list-item>
 
-        <md-list-item>
-          <md-icon>move_to_inbox</md-icon>
-          <span class="md-list-item-text"><router-link to="/producer">Producer</router-link></span>
-        </md-list-item>
-
-        <md-list-item>
+        <md-list-item v-on:click="onClickPage('broker')">
           <md-icon>send</md-icon>
-          <span class="md-list-item-text">Broker</span>
+          <span class="md-list-item-text">Broker</span >
         </md-list-item>
 
-        <md-list-item>
+        <md-list-item v-on:click="onClickPage('client')">
           <md-icon>delete</md-icon>
-          <span class="md-list-item-text">Client</span>
+          <span class="md-list-item-text">Client</span >
         </md-list-item>
       </md-list>
     </md-drawer>
@@ -48,6 +49,11 @@ export default {
       inline: null,
       showNavigation: false,
     };
+  },
+  methods: {
+    onClickPage(e) {
+      this.$emit('clicked', e)
+    }
   }
 };
 </script>
@@ -65,10 +71,6 @@ export default {
 }
 #logo {
   width: 50px;
-}
-.md-drawer {
-  width: 230px;
-  max-width: calc(100vw - 125px);
 }
 a {
     color: rgb(0, 96, 182);

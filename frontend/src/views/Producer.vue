@@ -1,8 +1,9 @@
 <template>
   <div>
+    <headerbar/>
+    <titlecard title="Producer"/>
     <!-- <datatable title="Green Credits"/> -->
     <div v-if="dataLoaded">
-      <createbtn/>
       <datatable title="Green Credits" :elements="getGreenAssets" :labels="labels"/>
     </div>
     <div v-else>
@@ -14,13 +15,15 @@
 <script>
   import * as apiService from "../services/apiService";
   import moment from "moment";
-  import datatable from "@/components/DataTable";
-  import createbtn from "@/components/CreateBtn";
+  import datatable from "@/components/ProducerDataTable";
+  import headerbar from "@/components/HeaderBar";
+  import titlecard from "@/components/TitleCard";
   export default {
     name: "producer",
     components: {
+      headerbar,
       datatable,
-      createbtn,
+      titlecard,
     },
     data: () => ({
       greenAssets: null,
@@ -47,7 +50,7 @@
           return {
             id: e.id,
             name: e.name,
-            creationDate: moment(e.creationDate).format('MMM Do YYYY, h:mm:ss a'),
+            creationDate: e.creationDate ? moment(e.creationDate).format('MMM Do YYYY, h:mm:ss a') : e.creationDate,
           };
         }); 
       }

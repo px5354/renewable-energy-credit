@@ -20,20 +20,23 @@
           <span class="md-list-item-text">Home</span >
         </md-list-item> -->
 
-        <md-list-item v-on:click="onClickPage('producer')">
-          <md-icon>move_to_inbox</md-icon>
-          <!-- <span class="md-list-item-text"><router-link to="/producer">Producer</router-link></span> -->
-          <span class="md-list-item-text">Producer</span >
+        <md-list-item>
+          <md-icon>how_to_reg</md-icon>
+          <span class="md-list-item-text"><router-link to="/producer">Producer</router-link></span>
+          <!-- <span class="md-list-item-text">Producer</span > -->
         </md-list-item>
 
-        <md-list-item v-on:click="onClickPage('broker')">
-          <md-icon>send</md-icon>
-          <span class="md-list-item-text">Broker</span >
+        <md-list-item>
+          <md-icon>swap_horiz</md-icon>
+          <!-- <md-icon>swap_horizontal_circle</md-icon> -->          
+          <!-- <span class="md-list-item-text">Broker</span > -->
+          <span class="md-list-item-text"><router-link to="/broker">Broker</router-link></span>
         </md-list-item>
 
-        <md-list-item v-on:click="onClickPage('client')">
-          <md-icon>delete</md-icon>
-          <span class="md-list-item-text">Client</span >
+        <md-list-item>
+          <md-icon>account_balance_wallet</md-icon>
+          <!-- <span class="md-list-item-text">Client</span > -->
+          <span class="md-list-item-text"><router-link to="/client">Client</router-link></span>
         </md-list-item>
       </md-list>
     </md-drawer>

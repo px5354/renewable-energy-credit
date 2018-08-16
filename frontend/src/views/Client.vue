@@ -1,5 +1,7 @@
 <template>
   <div>
+    <headerbar/>
+    <titlecard title="Client"/>
     <div v-if="dataLoaded">
       <datatable title="Wallet" :elements="greenAssets"/>
     </div>
@@ -11,11 +13,15 @@
 
 <script>
 import * as apiService from "../services/apiService";
-import datatable from "@/components/DataTable";
+import datatable from "@/components/ProducerDataTable";
+import headerbar from "@/components/HeaderBar";
+import titlecard from "@/components/TitleCard";
 export default {
   name: "client",
   components: {
     datatable,
+    headerbar,
+    titlecard,
   },
   data: () => ({
       greenAssets: null,

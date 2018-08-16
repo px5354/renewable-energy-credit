@@ -41,6 +41,12 @@ export const getAssets = () => axios({
   url: 'api/tracker/assets',
 });
 
+export const getAssetDetails = (assetId) => axios({
+  method: 'get',
+  baseURL: 'http://localhost:43056',
+  url: `api/tracker/assets/issuedbatches/${assetId}`,
+});
+
 export const getTransactions = () => axios({
   method: 'get',
   baseURL: 'http://localhost:43056',

@@ -29,12 +29,11 @@
                 <md-field :class="getValidationClass('energyType')">
                     <label for="energyType">Energy Type</label>
                     <md-select name="energyType" id="energyType" v-model="form.energyType" md-dense :disabled="sending">
-                    <md-option value="W">Wind power</md-option>
-                    <md-option value="H">Hydropower</md-option>
-                    <md-option value="S">Solar energy</md-option>
-                    <md-option value="G">Geothermal energy</md-option>
-                    <md-option value="B">Bio energy</md-option>
-                    <md-option value="E">Energy storage</md-option>
+                    <md-option value="Wind">Wind</md-option>
+                    <md-option value="Water">Water</md-option>
+                    <md-option value="Solar">Solar</md-option>
+                    <md-option value="Geothermal">Geothermal</md-option>
+                    <md-option value="Bio">Bio</md-option>
                     </md-select>
                     <span class="md-error">The energy type is required</span>
                 </md-field>
@@ -57,11 +56,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                    <md-field>
-                        <label for="energyType">Unit</label>
-                        <md-select name="unit" id="unit" md-dense>
-                        <md-option value="kWh">kWh</md-option>
-                        <md-option value="Wh">Wh</md-option>
-                        </md-select>
+                        <span>kWh</span>
                     </md-field>     
                 </div>
             </div>
@@ -160,7 +155,6 @@
 
 <style lang="scss" scoped>
 .create-btn-container {
-    padding-top: 100px;
     float: right;
 }
 .create-btn {

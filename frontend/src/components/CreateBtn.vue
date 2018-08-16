@@ -72,9 +72,12 @@
       </md-card>
       </form>
     </md-dialog>
-    <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
-        <md-icon>add_circle_outline</md-icon> Create a green credit
+    <md-button class="md-icon-button md-raised md-primary" @click="showDialog=true">
+      <md-icon>add</md-icon>
     </md-button>
+    <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
+        <md-icon>add_circle_outline</md-icon> Create a green credit
+    </md-button> -->
   </div>
 </template>
 

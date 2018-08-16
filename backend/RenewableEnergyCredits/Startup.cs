@@ -34,7 +34,8 @@ namespace RenewableEnergyCredits
             {
                 var config = new Configuration
                 {
-                    BasePath = "https://api.mantle.services"
+//                    BasePath = "https://api.mantle.services"
+                    BasePath = "https://dev.api.mantle.services"
                 };
                 var auth = new AuthenticationApi(config);
                 var userResponse = await auth.AuthenticationLoginPostAsync(new UserLoginRequest("y.thibodeau1@gmail.com", "Test1234"));

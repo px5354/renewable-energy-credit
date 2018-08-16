@@ -102,5 +102,8 @@ namespace RenewableEnergyCredits.Controllers
             return Ok(balances);
             //            return StatusCode(StatusCodes.Status200OK);
         }
+//        TrackerAssetsBatchesByAssetIdGet
+        
+        
     }
 }

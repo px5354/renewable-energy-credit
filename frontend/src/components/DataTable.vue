@@ -7,7 +7,7 @@
         <h1 class="md-title">{{ title }}</h1>
       </md-table-toolbar>
 
-      <md-table-row :id="item.id" slot="md-table-row" slot-scope="{ item }">
+      <md-table-row :id="item.id" @click="printStuff(item.id)" slot="md-table-row" slot-scope="{ item }">
         <!-- <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
@@ -18,15 +18,17 @@
         <md-table-cell md-label="Email">{{ item.email }}</md-table-cell>
         <md-table-cell md-label="Gender">{{ item.gender }}</md-table-cell>
         <md-table-cell md-label="Job Title">{{ item.title }}</md-table-cell> -->
+        <!-- <md-table-cell :v-for="label in this.labels" :md-label="label.label">
+          {{ item[label.label] }}
+        </md-table-cell> -->
         <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Creation Date">{{ getDate(item.creationDate) }}</md-table-cell>
+        <md-table-cell md-label="Creation Date">{{ item.creationDate }}</md-table-cell>
       </md-table-row>
     </md-table>
   </div>
 </template>
 
 <script>
-  import moment from "moment";
   export default {
     name: 'datatable',
     props: ['title', 'elements', 'labels'],
@@ -48,15 +50,15 @@
         },
       ]
     }),
-    methods: {
-      getDate(date){
-        return moment(date).format('MMM Do YYYY, h:mm:ss a');;
-      },
-    },
     props: {
       title: String,
       elements: Array,
       labels: Array,
+    },
+    methods: {
+      printStuff(e){
+        console.log(e);
+      }
     },
     mounted(){
       console.log("mounted");

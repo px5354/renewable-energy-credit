@@ -2,7 +2,6 @@
   <div>
     <headerbar/>
     <titlecard title="Producer"/>
-    <!-- <datatable title="Green Credits"/> -->
     <div v-if="dataLoaded">
       <datatable title="Green Credits" :elements="getGreenAssets" :labels="labels"/>
     </div>
@@ -15,7 +14,7 @@
 <script>
   import * as apiService from "../services/apiService";
   import moment from "moment";
-  import datatable from "@/components/ProducerDataTable";
+  import datatable from "@/components/AssetDataTable";
   import headerbar from "@/components/HeaderBar";
   import titlecard from "@/components/TitleCard";
   export default {
@@ -49,6 +48,7 @@
         return this.greenAssets.map(e => {
           return {
             id: e.id,
+            status: e.blockchainStatus,
             name: e.name,
             creationDate: e.creationDate ? moment(e.creationDate).format('MMM Do YYYY, h:mm:ss a') : e.creationDate,
           };
@@ -66,10 +66,3 @@
     },
   };
 </script>
-
-<style lang="scss" scoped>
-.md-progress-spinner {
-    margin: 24px;
-    padding-top: 100px;
-}
-</style>

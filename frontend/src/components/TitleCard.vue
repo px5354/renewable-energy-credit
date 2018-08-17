@@ -20,8 +20,9 @@ export default {
 
 <style lang="scss" scoped>
 .card-container {
-  padding-top: 70px;
+  padding-top: 10px;
   margin: auto;
   width: 200px;
+  visibility: hidden;
 }
 </style>

@@ -1,12 +1,16 @@
 import axios from 'axios';
 
-function build(form) {
+function buildCreateAssetForm(form) {
   return {
-    PermanentCode: form.permanentCode,
-    University: form.university,
-    GraduationYear: form.graduationYear,
-    Program: form.program,
-    Gpa: form.gpa,
+    Type: form.energyType,
+  };
+}
+
+function buildIssueAmountForm(form) {
+  return {
+    AssetId: form.energyId,
+    RecipientEmail: form.email,
+    Amount: form.quantity,
   };
 }
 
@@ -35,6 +39,14 @@ export const verifyCertificate = form => axios({
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 
+export const createAsset = (form) => axios({
+  method: 'post',
+  baseURL: 'http://localhost:43056',
+  url: 'api/tracker',
+  data: buildCreateAssetForm(form),
+  config: { headers: { 'Content-Type': 'application/json' } },
+});
+
 export const getAssets = () => axios({
   method: 'get',
   baseURL: 'http://localhost:43056',
@@ -45,6 +57,14 @@ export const getAssetDetails = (assetId) => axios({
   method: 'get',
   baseURL: 'http://localhost:43056',
   url: `api/tracker/assets/issuedbatches/${assetId}`,
+});
+
+export const issueAmount = (form) => axios({
+  method: 'post',
+  baseURL: 'http://localhost:43056',
+  url: 'api/tracker/assets/issue',
+  data: buildIssueAmountForm(form),
+  config: { headers: { 'Content-Type': 'application/json' } },
 });
 
 export const getTransactions = () => axios({

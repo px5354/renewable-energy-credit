@@ -50,6 +50,9 @@
       getEnergyDetail() {
         return this.energyDetails.batches.map(e => {
           return {
+            id: e.id,
+            status: e.blockchainStatus,
+            factoryId: e.factoryId,
             recipient: e.recipientDisplayName,
             amount: e.amount,
             date: moment(e.timestamp).format('MMM Do YYYY, h:mm:ss a'),
@@ -73,10 +76,3 @@
     },
   };
 </script>
-
-<style lang="scss" scoped>
-.md-progress-spinner {
-    margin: 24px;
-    padding-top: 100px;
-}
-</style>

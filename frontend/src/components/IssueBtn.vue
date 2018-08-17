@@ -1,7 +1,7 @@
 <template>
   <div class="create-btn-container">
     <md-dialog :md-active.sync="showDialog">
-      <md-dialog-title>Create new green credit</md-dialog-title>
+      <md-dialog-title>Add energy ressources</md-dialog-title>
       <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item">
         <md-card-content>
@@ -26,16 +26,9 @@
             </div> -->
 
             <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('energyType')">
-                    <label for="energyType">Energy Type</label>
-                    <md-select name="energyType" id="energyType" v-model="form.energyType" md-dense :disabled="sending">
-                    <md-option value="Wind Power">Wind Power</md-option>
-                    <md-option value="Hydropower">Hydropower</md-option>
-                    <md-option value="Solar Energy">Solar Energy</md-option>
-                    <md-option value="Geothermal Energy">Geothermal Energy</md-option>
-                    <md-option value="Bio Energy">Bio Energy</md-option>
-                    </md-select>
-                    <span class="md-error">The energy type is required</span>
+                <md-field>
+                  <!-- <label for="energyType">Energy Type</label> -->
+                  <span>{{ energyDisplayName }}</span>
                 </md-field>
             </div>
 
@@ -45,7 +38,7 @@
                 <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
                 <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
             </md-field> -->
-            <!-- <div class="md-layout md-gutter">
+            <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                     <md-field :class="getValidationClass('quantity')">
                         <label for="quantity">Quantity</label>
@@ -55,14 +48,14 @@
                     </md-field>                
                 </div>
                 <div class="md-layout-item md-small-size-100">
-                   <md-field>
-                        <span>kWh</span>
-                    </md-field>     
+                  <md-field>
+                    <span>kWh</span>
+                  </md-field>     
                 </div>
-            </div> -->
+            </div>
           </md-card-content>
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending">Create green credit</md-button>
+          <md-button type="submit" class="md-primary" :disabled="sending">Issue energy</md-button>
         </md-card-actions>
       </md-card>
       <md-snackbar md-position="left" :md-duration="5000" :md-active.sync="showSnackbar" md-persistent>
@@ -71,7 +64,7 @@
       </form>
     </md-dialog>
     <md-button class="md-icon-button md-raised md-primary" @click="showDialog=true">
-      <md-icon>add</md-icon>
+      <md-icon>library_add</md-icon>
     </md-button>
     <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
         <md-icon>add_circle_outline</md-icon> Create a green credit
@@ -90,29 +83,36 @@
     minValue,
   } from 'vuelidate/lib/validators';
   export default {
-    name: "createbtn",
+    name: "issuebtn",
     mixins: [validationMixin],
+    props: ['energyDisplayName', 'assetId'],
+    props: {
+      energyDisplayName: String,
+      assetId: String,
+    },
     data: () => ({
       showDialog: false,
       dialogValue: null,
       form: {
-        energyType: null,
-        // quantity: null,
+        energyId: null,
+        email: null,
+        quantity: null,
       },
+      assetCreated: false,
       sending: false,
       snackBarMsg: null,
       showSnackbar: false,
     }),
     validations: {
       form: {
-        // quantity: {
-        //   required,
-        //   maxLength: maxLength(3),
-        //   minValue: minValue(1),
-        // },
-        energyType: {
-          required
+        quantity: {
+          required,
+          maxLength: maxLength(3),
+          minValue: minValue(1),
         },
+        // energyType: {
+        //   required
+        // },
         // email: {
         //   required,
         //   email
@@ -134,15 +134,17 @@
         this.form.quantity = null
         this.form.energyType = null
       },
-      createAsset () {
-        this.sending = true;
-        apiService.createAsset(this.form)
+      issueAmount () {
+        this.form.energyId = this.assetId;
+        this.form.email = "philippe@mantle.services";
+        this.sending = true
+        apiService.issueAmount(this.form)
           .then(() => {            
-            this.snackBarMsg = "New type of Green Credit created.";
+            this.assetCreated = true;
+            this.snackBarMsg = "Energy issued.";
             this.showSnackbar = true;
             this.sending = false;
             this.clearForm();
-            vm.$forceUpdate();
           }).catch((error) => {
             if (error.response) {
                 this.snackBarMsg = error.response.data;
@@ -160,7 +162,7 @@
         this.$v.$touch()
 
         if (!this.$v.$invalid) {
-          this.createAsset()
+          this.issueAmount()
         }
       }
     }

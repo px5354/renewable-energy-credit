@@ -3,7 +3,7 @@
     <headerbar/>
     <titlecard title="Client"/>
     <div v-if="dataLoaded">
-      <datatable title="Wallet" :elements="greenAssets"/>
+      <datatable title="Wallet" :elements="balances"/>
     </div>
     <div v-else>
       <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
@@ -13,7 +13,7 @@
 
 <script>
 import * as apiService from "../services/apiService";
-import datatable from "@/components/ProducerDataTable";
+import datatable from "@/components/WalletDataTable";
 import headerbar from "@/components/HeaderBar";
 import titlecard from "@/components/TitleCard";
 export default {
@@ -24,22 +24,22 @@ export default {
     titlecard,
   },
   data: () => ({
-      greenAssets: null,
+      balances: null,
       dataLoaded: false,
   }),
   watch: {
-    greenAssets(newData, oldData) {
+    balances(newData, oldData) {
       this.dataLoaded = true;
     }
   },
   methods: {
-    getGreenAssets() {
-      apiService.getAssets()
-        .then(body => (this.greenAssets = body.data));
+    getBalances() {
+      apiService.getBalances()
+        .then(body => (this.balances = body.data));
     },
   },
   mounted(){
-    this.getGreenAssets();
+    this.getBalances();
   },
 };
 </script>

@@ -41,19 +41,28 @@ namespace RenewableEnergyCredits.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] GreenCredit greenCredit)
+        public async Task<IActionResult> Create([FromBody] GreenEnergy greenEnergy)
 //        public StatusCodeResult Create([FromBody] GreenCredit greenCredit)
         {
 //            var asset = await _mediator.Send(new CreateAssetCommand(token.ClientId, request.Name));
 //            _mantleTrackerProducer.
 //            var hypervisorRequest = new FactoryCreatePostRequest(request.Name);
 //            var asset = await _hypervisorRestClient.SendRequestAsync<AssetIdentity>("/factory/assets", HttpMethod.Post, new RestRequestConfig { Body = hypervisorRequest });
-            var asset = await _mantleTrackerProducer.TrackerAssetsPostAsync(new TrackerAssetCreateRequest(greenCredit.Type));
-
-//            var issuedAsset = await _mantleTrackerProducer.TrackerAssetsIssuePostAsync(
-//                new TrackerAssetIssueRequest(asset.Id, "y.thibodeau1@gmail.com", greenCredit.Amount));
+            try
+            {
+                await _mantleTrackerProducer.TrackerAssetsPostAsync(new TrackerAssetCreateRequest(greenEnergy.Type));
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
             
-            return StatusCode(StatusCodes.Status201Created);
+
+//            await _mantleTrackerProducer.TrackerAssetsIssuePostAsync(new TrackerAssetIssueRequest(asset.Id, "y.thibodeau1@gmail.com", greenCredit.Amount));
+//            await _mantleTrackerProducer.TrackerAssetsIssuePostAsync(new TrackerAssetIssueRequest("ba0fa87f-fca1-44ad-a4ff-fe4bfeb1c0c6", "y.thibodeau1@gmail.com", greenCredit.Amount));
+//                new TrackerAssetIssueRequest(asset.Id, "y.thibodeau1@gmail.com", greenCredit.Amount));
+     
         }
 
         /// <summary>
@@ -87,7 +96,32 @@ namespace RenewableEnergyCredits.Controllers
             return Ok(issueBatch);
             //            return StatusCode(StatusCodes.Status200OK);
         }
-
+        
+        /// <summary>
+        /// Issue a certain amount of asset to a recipient.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("assets/issue")]
+//        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AssetIssueAmount([FromBody] AssetIssueRequest asr)
+        {
+//            var assets = await _mediator.Send(new GetAssetsQuery(token.ClientId));
+//            Console.WriteLine(greenCredit);
+            
+            try
+            {
+                await _mantleTrackerProducer.TrackerAssetsIssuePostAsync(
+                    new TrackerAssetIssueRequest(asr.AssetId,asr.RecipientEmail,asr.Amount));
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+            //            return StatusCode(StatusCodes.Status200OK);
+        }
+        
         /// <summary>
         /// Get all of the assets that have been created in Tracker. Requires the Tracker Admin Role.
         /// </summary>

@@ -112,7 +112,7 @@ namespace RenewableEnergyCredits.Controllers
         [Route("balances")]
         public async Task<IActionResult> GetBalances()
         {
-            var balances = await _mantleTrackerProducer.TrackerWalletDetailedbalancesGetAsync();
+            var balances = await _mantleTrackerClient.TrackerWalletDetailedbalancesGetAsync();
             return Ok(balances);
             //            return StatusCode(StatusCodes.Status200OK);
         }

@@ -53,3 +53,9 @@ export const getTransactions = () => axios({
   url: 'api/tracker/transactions',
 });
 
+export const getBalances = () => axios({
+  method: 'get',
+  baseURL: 'http://localhost:43056',
+  url: 'api/tracker/balances',
+});
+

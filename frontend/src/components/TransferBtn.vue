@@ -1,41 +1,20 @@
 <template>
   <div class="create-btn-container">
     <md-dialog :md-active.sync="showDialog">
-      <md-dialog-title>Create new green credit</md-dialog-title>
+      <md-dialog-title>Transfer energy ressources</md-dialog-title>
       <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item">
-        <md-card-content>
-            <!-- <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('firstName')">
-                    <label for="first-name">First Name</label>
-                    <md-input name="first-name" id="first-name" autocomplete="given-name" v-model="form.firstName" :disabled="sending" />
-                    <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-                    <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span>
-                </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('lastName')">
-                    <label for="last-name">Last Name</label>
-                    <md-input name="last-name" id="last-name" autocomplete="family-name" v-model="form.lastName" :disabled="sending" />
-                    <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
-                    <span class="md-error" v-else-if="!$v.form.lastName.minlength">Invalid last name</span>
-                </md-field>
-                </div>
-            </div> -->
-
+        <md-card-area md-inset>
+          <md-card-content>
+            <h3 class="md-subheading">
+              <md-icon>call_made</md-icon>
+              Energy to transfer
+            </h3>
+            
             <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('energyType')">
-                    <label for="energyType">Asset</label>
-                    <md-select name="energyType" id="energyType" v-model="form.energyType" md-dense :disabled="sending">
-                    <md-option value="Wind Power">Wind Power</md-option>
-                    <md-option value="Hydropower">Hydropower</md-option>
-                    <md-option value="Solar Energy">Solar Energy</md-option>
-                    <md-option value="Geothermal Energy">Geothermal Energy</md-option>
-                    <md-option value="Bio Energy">Bio Energy</md-option>
-                    </md-select>
-                    <span class="md-error">The asset is required</span>
+                <md-field>
+                  <!-- <label for="energyType">Asset</label> -->
+                  <span>{{ energyDisplayName }}</span>
                 </md-field>
             </div>
 
@@ -45,7 +24,7 @@
                 <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
                 <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
             </md-field> -->
-            <!-- <div class="md-layout md-gutter">
+            <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                     <md-field :class="getValidationClass('quantity')">
                         <label for="quantity">Quantity</label>
@@ -55,14 +34,42 @@
                     </md-field>                
                 </div>
                 <div class="md-layout-item md-small-size-100">
-                   <md-field>
-                        <span>kWh</span>
-                    </md-field>     
+                  <md-field>
+                    <span>kWh</span>
+                  </md-field>     
                 </div>
-            </div> -->
+            </div>
           </md-card-content>
+        </md-card-area>
+        <md-card-content>
+          <h3 class="md-subheading">
+            <md-icon>call_received</md-icon>
+            Money to receive
+          </h3>
+          <md-field :class="getValidationClass('email')">
+              <label for="email">Recipient</label>
+              <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
+              <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
+              <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
+          <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                  <md-field :class="getValidationClass('amount')">
+                      <label for="amount">Amount</label>
+                      <md-input type="number" id="amount" name="amount" autocomplete="amount" v-model="form.amount" :disabled="sending" />
+                      <span class="md-error" v-if="!$v.form.quantity.required">The amount is required</span>
+                      <span class="md-error" v-else>Invalid amount</span>                    
+                  </md-field>                
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field>
+                  <span>CAD</span>
+                </md-field>     
+              </div>
+          </div>
+        </md-card-content>
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending">Create green credit</md-button>
+          <md-button type="submit" class="md-primary" :disabled="sending">Transfer energy</md-button>
         </md-card-actions>
       </md-card>
       <md-snackbar md-position="left" :md-duration="5000" :md-active.sync="showSnackbar" md-persistent>
@@ -70,8 +77,9 @@
       </md-snackbar>
       </form>
     </md-dialog>
-    <md-button class="md-icon-button md-raised md-primary" @click="showDialog=true">
-      <md-icon>add</md-icon>
+    <md-button class="md-raised md-primary" @click="showDialog=true">
+      <md-icon>swap_horiz</md-icon>
+      <span>sell</span>
     </md-button>
     <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
         <md-icon>add_circle_outline</md-icon> Create a green credit
@@ -90,33 +98,43 @@
     minValue,
   } from 'vuelidate/lib/validators';
   export default {
-    name: "createbtn",
+    name: "transferbtn",
     mixins: [validationMixin],
+    props: ['energyDisplayName', 'assetId'],
+    props: {
+      energyDisplayName: String,
+      assetId: String,
+    },
     data: () => ({
       showDialog: false,
       dialogValue: null,
       form: {
-        energyType: null,
-        // quantity: null,
+        energyId: null,
+        email: null,
+        quantity: null,
+        amount: null,
       },
+      assetCreated: false,
       sending: false,
       snackBarMsg: null,
       showSnackbar: false,
     }),
     validations: {
       form: {
-        // quantity: {
-        //   required,
-        //   maxLength: maxLength(3),
-        //   minValue: minValue(1),
-        // },
-        energyType: {
-          required
+        quantity: {
+          required,
+          maxLength: maxLength(3),
+          minValue: minValue(1),
         },
-        // email: {
-        //   required,
-        //   email
-        // }
+        amount: {
+          required,
+          maxLength: maxLength(3),
+          minValue: minValue(1),
+        },
+        email: {
+          required,
+          email
+        }
       }
     },
     methods: {
@@ -132,17 +150,19 @@
       clearForm () {
         this.$v.$reset()
         this.form.quantity = null
-        this.form.energyType = null
+        this.form.amount = null
+        this.form.email = null
       },
-      createAsset () {
-        this.sending = true;
-        apiService.createAsset(this.form)
+      issueAmount () {
+        this.form.energyId = this.assetId;
+        this.sending = true
+        apiService.issueAmount(this.form)
           .then(() => {            
-            this.snackBarMsg = "New type of Green Credit created.";
+            this.assetCreated = true;
+            this.snackBarMsg = "Energy issued.";
             this.showSnackbar = true;
             this.sending = false;
             this.clearForm();
-            vm.$forceUpdate();
           }).catch((error) => {
             if (error.response) {
                 this.snackBarMsg = error.response.data;
@@ -160,7 +180,7 @@
         this.$v.$touch()
 
         if (!this.$v.$invalid) {
-          this.createAsset()
+          this.issueAmount()
         }
       }
     }

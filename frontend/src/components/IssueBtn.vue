@@ -27,7 +27,7 @@
 
             <div class="md-layout-item md-small-size-100">
                 <md-field>
-                  <!-- <label for="energyType">Energy Type</label> -->
+                  <!-- <label for="energyType">Asset</label> -->
                   <span>{{ energyDisplayName }}</span>
                 </md-field>
             </div>

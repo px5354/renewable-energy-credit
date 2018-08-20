@@ -17,7 +17,7 @@
         <md-tooltip v-if="item.status!='Confirmed'" md-direction="right">
           Applying operations in blockchain
         </md-tooltip>
-        <md-table-cell md-label="Energy Type" class="text-row long-text">{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Asset" class="text-row long-text">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="Creation Date" class="text-row">{{ item.creationDate }}</md-table-cell>
       </md-table-row>
     </md-table>

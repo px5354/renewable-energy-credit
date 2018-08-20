@@ -21,36 +21,29 @@
         <!-- <md-table-cell :v-for="label in this.labels" :md-label="label.label">
           {{ item[label.label] }}
         </md-table-cell> -->
-        <md-table-cell md-label="Asset" class="text-row">{{ item.displayName }}</md-table-cell>
-        <md-table-cell md-label="Amount" md-numeric>{{ item.amount }}</md-table-cell>
+        <md-table-cell md-label="Asset" class="text-row">
+          {{ item.displayName }}
+        </md-table-cell>
+        <md-table-cell md-label="Amount">
+          {{ item.amount }}
+        </md-table-cell>
+        <md-table-cell class="text-row table-btn">
+          <transferbtn :energyDisplayName="item.displayName"/>
+        </md-table-cell>
       </md-table-row>
     </md-table>
   </div>
 </template>
 
 <script>
+  import transferbtn from "@/components/TransferBtn";
   export default {
-    name: 'walletdatatable',
+    name: 'transferdatatable',
     props: ['title', 'elements', 'labels'],
     components: {
+      transferbtn,
     },
     data: () => ({
-      users: [
-        {
-          id: 1,
-          name: "Shawna Dubbin",
-          email: "sdubbin0@geocities.com",
-          gender: "Male",
-          title: "Assistant Media Planner"
-        },
-        {
-          id: 2,
-          name: "Odette Demageard",
-          email: "odemageard1@spotify.com",
-          gender: "Female",
-          title: "Account Coordinator"
-        },
-      ]
     }),
     props: {
       title: String,
@@ -79,5 +72,8 @@
 }
 .text-row {
   text-align: left;
+}
+.table-btn {
+  width: 5px;
 }
 </style>

@@ -7,6 +7,7 @@
         </md-button>
         <img id="logo" src="../assets/logo.png">
         <h3 class="md-title">{{title}}</h3>
+        <!-- <span>Welcome boy</span> -->
       </div>
     </md-toolbar>
     <md-drawer :md-active.sync="showNavigation">

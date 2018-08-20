@@ -13,7 +13,7 @@
 
 <script>
 import * as apiService from "../services/apiService";
-import datatable from "@/components/WalletDataTable";
+import datatable from "@/components/TransferDataTable";
 import headerbar from "@/components/HeaderBar";
 import titlecard from "@/components/TitleCard";
 export default {

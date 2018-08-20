@@ -30,21 +30,21 @@
           <md-icon>move_to_inbox</md-icon>      
           <span class="md-list-item-text">Home</span >
         </md-list-item> -->
-
-        <md-list-item v-on:click="this.$router.push({ path: `/producer` });">
+        <md-list-item>
+        <!-- <md-list-item v-on:click="this.$router.push({ path: `/producer` });"> -->
           <md-icon>how_to_reg</md-icon>
           <span class="md-list-item-text"><router-link to="/producer">Producer</router-link></span>
           <!-- <span class="md-list-item-text">Producer</span > -->
         </md-list-item>
-
-        <md-list-item v-on:click="this.$router.push({ path: `/broker` });">
+        <md-list-item>
+        <!-- <md-list-item v-on:click="this.$router.push({ path: `/broker` });"> -->
           <md-icon>swap_horiz</md-icon>
           <!-- <md-icon>swap_horizontal_circle</md-icon> -->          
           <!-- <span class="md-list-item-text">Broker</span > -->
           <span class="md-list-item-text"><router-link to="/broker">Broker</router-link></span>
         </md-list-item>
-
-        <md-list-item v-on:click="this.$router.push({ path: `/client` });">
+        <md-list-item>
+        <!-- <md-list-item v-on:click="this.$router.push({ path: `/client` });"> -->
           <md-icon>account_balance_wallet</md-icon>
           <!-- <span class="md-list-item-text">Client</span > -->
           <span class="md-list-item-text"><router-link to="/client">Client</router-link></span>

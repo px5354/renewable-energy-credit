@@ -14,6 +14,14 @@ function buildIssueAmountForm(form) {
   };
 }
 
+function buildTransferAssetForm(form) {
+  return {
+    RecipientEmail: form.email,
+    Amount: form.amount,
+    FactoryId: form.factoryId,
+  };
+}
+
 export const getUniversities = () => axios({
   method: 'get',
   baseURL: 'https://graduationchecker.azurewebsites.net',
@@ -64,6 +72,14 @@ export const issueAmount = (form) => axios({
   baseURL: 'http://localhost:43056',
   url: 'api/tracker/assets/issue',
   data: buildIssueAmountForm(form),
+  config: { headers: { 'Content-Type': 'application/json' } },
+});
+
+export const transferAsset = (form) => axios({
+  method: 'post',
+  baseURL: 'http://localhost:43056',
+  url: 'api/tracker/wallet/transfer',
+  data: buildTransferAssetForm(form),
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 

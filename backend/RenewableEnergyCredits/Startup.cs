@@ -40,26 +40,24 @@ namespace RenewableEnergyCredits
                 var auth = new AuthenticationApi(config);
                 var userResponse =
                     await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
-//                        "philippe@mantle.services", "Test1234"));
-                        "y.thibodeau1@gmail.com", "Test1234"));
+                        "philippe@mantle.services", "Test1234"));
                 config.AddDefaultHeader("Authorization", userResponse.AccessToken);
                 return config;
             });
             
-            services.AddSingleton(async mantleConfigClient =>
-            {
-                var config = new Configuration
-                {
-                    BasePath = "https://dev.api.mantle.services"
-                };
-                var auth = new AuthenticationApi(config);
-                var userResponse =
-                    await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
-                        "philippe@mantle.services", "Test1234"));
-//                "y.thibodeau1@gmail.com", "Test1234"));
-                config.AddDefaultHeader("Authorization", userResponse.AccessToken);
-                return config;
-            });
+//            services.AddSingleton(async mantleConfigClient =>
+//            {
+//                var config = new Configuration
+//                {
+//                    BasePath = "https://dev.api.mantle.services"
+//                };
+//                var auth = new AuthenticationApi(config);
+//                var userResponse =
+//                    await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
+//                        "gabriel@mantle.services", "Test1234"));
+//                config.AddDefaultHeader("Authorization", userResponse.AccessToken);
+//                return config;
+//            });
 
             services.AddSingleton(sqlConnection =>
             {

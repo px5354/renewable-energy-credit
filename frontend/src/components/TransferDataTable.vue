@@ -25,10 +25,11 @@
           {{ item.displayName }}
         </md-table-cell>
         <md-table-cell md-label="Amount">
-          {{ item.amount }}
+          {{ item.remainingAmount }}
         </md-table-cell>
         <md-table-cell class="text-row table-btn">
-          <transferbtn :energyDisplayName="item.displayName"/>
+          <sellbtn v-if="item.displayName != 'CAD'" :selectedAsset="item"/>
+          <buybtn v-else :selectedAsset="item"/>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -36,12 +37,14 @@
 </template>
 
 <script>
-  import transferbtn from "@/components/TransferBtn";
+  import sellbtn from "@/components/SellBtn";
+  import buybtn from "@/components/BuyBtn";
   export default {
     name: 'transferdatatable',
     props: ['title', 'elements', 'labels'],
     components: {
-      transferbtn,
+      sellbtn,
+      buybtn,
     },
     data: () => ({
     }),
@@ -58,7 +61,7 @@
     mounted(){
       console.log("mounted");
       console.log(this.elements);
-  },
+    },
   }
 </script>
 

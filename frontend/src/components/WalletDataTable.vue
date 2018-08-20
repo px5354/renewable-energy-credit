@@ -22,7 +22,7 @@
           {{ item[label.label] }}
         </md-table-cell> -->
         <md-table-cell md-label="Asset" class="text-row">{{ item.displayName }}</md-table-cell>
-        <md-table-cell md-label="Amount" md-numeric>{{ item.amount }}</md-table-cell>
+        <md-table-cell md-label="Amount" md-numeric>{{ item.remainingAmount }}</md-table-cell>
       </md-table-row>
     </md-table>
   </div>

@@ -165,10 +165,10 @@
         this.form.amount = null
         this.form.email = null
       },
-      transferEnergy () {
+      transferAsset () {
         this.form.energyId = this.assetId;
         this.sending = true
-        apiService.transferEnergy(this.form)
+        apiService.transferAsset(this.form)
           .then(() => {            
             this.assetCreated = true;
             this.snackBarMsg = "Transfer success";

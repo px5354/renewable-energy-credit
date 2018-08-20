@@ -7,8 +7,18 @@
         </md-button>
         <img id="logo" src="../assets/logo.png">
         <h3 class="md-title">{{title}}</h3>
-        <!-- <span>Welcome boy</span> -->
       </div>
+      <div class="md-toolbar-section-end">
+        <div v-if="isProfileLoaded">
+          <span id="username">{{ `Welcome, ${name}` }}</span>
+        </div>
+        <div v-if="isAuthenticated" @click="logout">
+          <md-button class="logout md-primary">Logout</md-button>
+        </div>
+        <div class="right-side" v-if="!isAuthenticated && !authLoading">
+          <router-link to="/login">Login</router-link>
+        </div>
+      </div>      
     </md-toolbar>
     <md-drawer :md-active.sync="showNavigation">
       <md-toolbar class="md-transparent" md-elevation="0">
@@ -45,6 +55,8 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
+import { AUTH_LOGOUT } from '@/store/actions/auth';
 export default {
   name: "headerbar",
   data() {
@@ -57,8 +69,18 @@ export default {
   methods: {
     onClickPage(e) {
       this.$emit('clicked', e)
-    }
-  }
+    },
+    logout: function () {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
+    },  
+  },
+  computed: {
+    ...mapGetters(['getProfile', 'isAuthenticated', 'isProfileLoaded']),
+    ...mapState({
+      authLoading: state => state.auth.status === 'loading',
+      name: state => `${state.user.profile.title} ${state.user.profile.name}`,
+    })
+  },  
 };
 </script>
 
@@ -69,9 +91,7 @@ export default {
 #toolbar {
   position: fixed;
   z-index: 10;
-}
-#searchbar {
-  width: 200px;
+  flex: 1;
 }
 #logo {
   width: 50px;
@@ -82,8 +102,8 @@ a {
 }
 a:hover 
 {
-     color:#00A0C6; 
-     text-decoration:none; 
-     cursor:pointer;  
+  color:#00A0C6; 
+  text-decoration:none; 
+  cursor:pointer;  
 }
 </style>

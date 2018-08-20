@@ -39,7 +39,7 @@ namespace RenewableEnergyCredits.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] GreenEnergy greenEnergy)
+        public async Task<IActionResult> CreateAsset([FromBody] GreenEnergy greenEnergy)
 //        public StatusCodeResult Create([FromBody] GreenCredit greenCredit)
         {
 //            var asset = await _mediator.Send(new CreateAssetCommand(token.ClientId, request.Name));
@@ -158,9 +158,6 @@ namespace RenewableEnergyCredits.Controllers
 //        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         public async Task<IActionResult> TransferAssetAmount([FromBody] TransferRequest tr)
         {
-//            var assets = await _mediator.Send(new GetAssetsQuery(token.ClientId));
-//            Console.WriteLine(greenCredit);
-            
             try
             {
                 await _mantleTracker.TrackerWalletTransferPostAsync(
@@ -171,7 +168,6 @@ namespace RenewableEnergyCredits.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
-            //            return StatusCode(StatusCodes.Status200OK);
         }
     }
 }

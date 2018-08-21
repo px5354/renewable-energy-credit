@@ -44,13 +44,9 @@
                         <label for="quantity">Quantity</label>
                         <md-input type="number" id="quantity" name="quantity" autocomplete="quantity" v-model="form.quantity" :disabled="sending" />
                         <span class="md-error" v-if="!$v.form.quantity.required">The quantity is required</span>
-                        <span class="md-error" v-else>Invalid quantity</span>                    
+                        <span class="md-error" v-else>Invalid quantity</span> 
+                        <span class="md-suffix">kWh</span>                   
                     </md-field>                
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <span>kWh</span>
-                  </md-field>     
                 </div>
             </div>
           </md-card-content>

@@ -41,7 +41,7 @@
           <md-icon>swap_horiz</md-icon>
           <!-- <md-icon>swap_horizontal_circle</md-icon> -->          
           <!-- <span class="md-list-item-text">Broker</span > -->
-          <span class="md-list-item-text"><router-link to="/broker">Broker</router-link></span>
+          <span class="md-list-item-text"><router-link to="/broker">Market</router-link></span>
         </md-list-item>
         <md-list-item>
         <!-- <md-list-item v-on:click="this.$router.push({ path: `/client` });"> -->

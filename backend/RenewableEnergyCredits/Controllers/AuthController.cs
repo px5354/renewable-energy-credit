@@ -26,18 +26,18 @@ namespace RenewableEnergyCredits.Controllers
         /// Login a user and return an access token.
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] GreenEnergy greenEnergy)
-        {
-            try
-            {
-                await _mantleTracker.TrackerAssetsPostAsync(new TrackerAssetCreateRequest(greenEnergy.Type));
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
+        // [HttpPost]
+        // public async Task<IActionResult> Login([FromBody] GreenEnergy greenEnergy)
+        // {
+        //     try
+        //     {
+        //         await _mantleTracker.TrackerAssetsPostAsync(new TrackerAssetCreateRequest(greenEnergy.Type));
+        //         return StatusCode(StatusCodes.Status201Created);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        //     }
+        // }
     }
 }

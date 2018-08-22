@@ -138,7 +138,7 @@ namespace RenewableEnergyCredits.Controllers
         [Route("transactions")]
         public async Task<IActionResult> GetTransactions()
         {        
-            var transactions = await _mantleTracker.TrackerTransactionsGetAsync(DateTime.Now, 50, 50);
+            var transactions = await _mantleTracker.TrackerTransactionsGetAsync();
             return Ok(transactions);
             //            return StatusCode(StatusCodes.Status200OK);
         }        

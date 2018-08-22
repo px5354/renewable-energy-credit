@@ -13,14 +13,14 @@ function buildIssueAmountForm(form) {
   return {
     AssetId: form.energyId,
     RecipientEmail: form.email,
-    Amount: form.quantity,
+    Amount: parseInt(form.quantity),
   };
 }
 
 function buildTransferAssetForm(form) {
   return {
     RecipientEmail: form.recipientEmail,
-    Amount: form.amount,
+    Amount: parseInt(form.amount),
     AssetId: form.assetId,
     SenderEmail: form.senderEmail,
   };

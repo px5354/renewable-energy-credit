@@ -277,7 +277,7 @@ export default {
     mockNewOrder() {
       this.$nextTick(function () {
         window.setInterval(() => {
-          this.orderBookData = utils.generateData(2000, 60);
+          this.orderBookData = utils.generateData(200, 60);
           // this.orderBookData.buy.pop();
           // this.orderBookData.buy.unshift(
           //   {

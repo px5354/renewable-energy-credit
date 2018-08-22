@@ -40,7 +40,7 @@ export const generateData = (min, n) => {
   let data = [];
   data.push(min);
   for(let i=1; i<n; i++) {
-    data.push(data[i-1] + generateRandomNumber(20, 50))
+    data.push(data[i-1] + generateRandomNumber(10, 25))
   }
   let buys = data.slice(0, data.length/2).reverse();
   let sells = data.slice(data.length/2, data.length + 1);

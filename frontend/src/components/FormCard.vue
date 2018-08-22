@@ -41,7 +41,7 @@
         </div>
       </md-card-content>      
       <md-card-actions>
-        <md-button type="submit" v-bind:class="[title.toUpperCase() == 'SELL' ? 'md-accent' : 'md-primary']" :disabled="sending">{{ `${title} ${energyType.shortName}` }}</md-button>
+        <md-button @click="onSubmit" v-bind:class="[title.toUpperCase() == 'SELL' ? 'md-accent' : 'md-primary']" :disabled="sending">{{ `${title} ${energyType.shortName}` }}</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -50,21 +50,15 @@
 <script>
 export default {
   name: "formcard",
-  props: ['title', 'energyType','marketValue', 'formData'],
+  props: ['title', 'energyType','marketValue', 'formData', 'onSubmit'],
   props: {
     title: String,
     energyType: Object,
     marketValue: Number,
     formData: Object,
+    onSubmit: Function,
   },
   data: () => ({
-    // form: {
-    //   factoryId: null,
-    //   email: null,
-    //   price: null,
-    //   amount: null,
-    //   total: null,
-    // },
     sending: false,
   }),
   computed: {

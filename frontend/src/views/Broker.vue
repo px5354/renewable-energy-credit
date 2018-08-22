@@ -13,8 +13,8 @@
         </md-radio>
       </div>
       <div>
-        <formcard title="BUY" :energyType="energyTypes[energyRadio]" :marketValue="marketBuyPrice" :formData="form.buy" />
-        <formcard title="SELL" :energyType="energyTypes[energyRadio]" :marketValue="marketSellPrice" :formData="form.sell"/>
+        <formcard title="BUY" :energyType="energyTypes[energyRadio]" :marketValue="marketBuyPrice" :formData="form.buy" :onSubmit="buyEnergy" />
+        <formcard title="SELL" :energyType="energyTypes[energyRadio]" :marketValue="marketSellPrice" :formData="form.sell" :onSubmit="sellEnergy" />
       </div>
       <div>
         <datatable title="BUY ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="orderBookData.buy" />
@@ -48,6 +48,8 @@ export default {
     dataLoaded: false,
     energyRadio: energyEnum.EnergyType.WindPower.value,
     energyTypes: energyEnum.EnergyType,
+    energyAssets: null,
+    currencyAssets: null,
     form: {
       buy: {
         price: null,
@@ -94,9 +96,24 @@ export default {
     getBalances() {
       apiService.getBalances()
         .then(body => {
-          console.log(body);
           this.balances = body.data;
         });
+    },
+    resetBuyForm() {
+      this.form = {
+        buy: {
+          price: null,
+          amount: null,
+        },
+      };
+    },
+    resetSellForm() {
+      this.form = {
+        sell: {
+          price: null,
+          amount: null,
+        },
+      };
     },
     resetForm() {
       this.form = {
@@ -111,8 +128,8 @@ export default {
       };
     },
     setFormEmailsReceive() {
-      this.form.recipientEmail = "gabriel@mantle.services";
-      this.form.senderEmail = "philippe@mantle.services";
+      this.form.recipientEmail = "philippe@mantle.services";
+      this.form.senderEmail = "gabriel@mantle.services";
     },
     setFormEmailsSend() {
       this.form.recipientEmail = "gabriel@mantle.services";
@@ -120,23 +137,40 @@ export default {
     },
     buyEnergy() {
       this.setFormEmailsReceive();
-      apiService.transferAmount(this.form)
-        .then(body => {
-          console.log(body);
+      console.log(this.form.senderEmail);
+      console.log(this.form.buy.amount);
+      console.log(this.form.recipientEmail);
+      this.setFormEmailsSend();
+      console.log(this.form.senderEmail);
+      console.log(this.form.buy.price);
+      console.log(this.form.recipientEmail);
+      // this.resetBuyForm();
+      // apiService.transferAmount(this.form)
+      //   .then(body => {
+      //     console.log(body);
 
-        });
+      //   });
     },
     sellEnergy() {
-      apiService.transferAmount(this.form)
-        .then(body => {
-          console.log(body);
+      this.setFormEmailsReceive();
+      console.log(this.form.senderEmail);
+      console.log(this.form.sell.price);
+      console.log(this.form.recipientEmail);
+      this.setFormEmailsSend();
+      console.log(this.form.senderEmail);
+      console.log(this.form.sell.amount);
+      console.log(this.form.recipientEmail);
+      // apiService.transferAmount(this.form)
+      //   .then(body => {
+      //     console.log(body);
 
-        });
+      //   });
     },
     fetchFactoryIds() {
       apiService.getAssets()
         .then(body => {
-          console.log(body.data);
+          this.energyAssets = body.data.filter(asset => Object.values(energyEnum.EnergyType).map(e => e.shortName).includes(asset.name));
+          this.currencyAssets = body.data.filter(asset => asset.name == "CAD");
           this.dataLoaded = true;
         });
     },

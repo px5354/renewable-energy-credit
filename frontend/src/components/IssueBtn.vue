@@ -81,10 +81,9 @@
   export default {
     name: "issuebtn",
     mixins: [validationMixin],
-    props: ['energyDisplayName', 'assetId'],
+    props: ['energyDisplayName'],
     props: {
       energyDisplayName: String,
-      assetId: String,
     },
     data: () => ({
       showDialog: false,
@@ -103,7 +102,6 @@
       form: {
         quantity: {
           required,
-          maxLength: maxLength(3),
           minValue: minValue(1),
         },
         // energyType: {
@@ -131,9 +129,10 @@
         this.form.energyType = null
       },
       issueAmount () {
-        this.form.energyId = this.assetId;
+        this.form.energyId = this.$route.params.assetId;
         this.form.email = "philippe@mantle.services";
-        this.sending = true
+        this.sending = true;
+        console.log(this.form);
         apiService.issueAmount(this.form)
           .then(() => {            
             this.assetCreated = true;

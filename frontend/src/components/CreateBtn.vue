@@ -5,61 +5,18 @@
       <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item">
         <md-card-content>
-            <!-- <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('firstName')">
-                    <label for="first-name">First Name</label>
-                    <md-input name="first-name" id="first-name" autocomplete="given-name" v-model="form.firstName" :disabled="sending" />
-                    <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-                    <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span>
-                </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('lastName')">
-                    <label for="last-name">Last Name</label>
-                    <md-input name="last-name" id="last-name" autocomplete="family-name" v-model="form.lastName" :disabled="sending" />
-                    <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
-                    <span class="md-error" v-else-if="!$v.form.lastName.minlength">Invalid last name</span>
-                </md-field>
-                </div>
-            </div> -->
-
             <div class="md-layout-item md-small-size-100">
                 <md-field :class="getValidationClass('energyType')">
                     <label for="energyType">Asset</label>
                     <md-select name="energyType" id="energyType" v-model="form.energyType" md-dense :disabled="sending">
-                    <md-option value="Wind Power">Wind Power</md-option>
-                    <md-option value="Hydropower">Hydropower</md-option>
-                    <md-option value="Solar Energy">Solar Energy</md-option>
-                    <md-option value="Geothermal Energy">Geothermal Energy</md-option>
-                    <md-option value="Bio Energy">Bio Energy</md-option>
+                    <md-option 
+                      v-for="(item) in Object.values(this.energyTypes)"
+                      :key="item.value"
+                      :value="item.shortName">{{ item.longName }}</md-option>
                     </md-select>
                     <span class="md-error">The asset is required</span>
                 </md-field>
             </div>
-
-            <!-- <md-field :class="getValidationClass('email')">
-                <label for="email">Email</label>
-                <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-                <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
-            </md-field> -->
-            <!-- <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                    <md-field :class="getValidationClass('quantity')">
-                        <label for="quantity">Quantity</label>
-                        <md-input type="number" id="quantity" name="quantity" autocomplete="quantity" v-model="form.quantity" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.form.quantity.required">The quantity is required</span>
-                        <span class="md-error" v-else>Invalid quantity</span>                    
-                    </md-field>                
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                   <md-field>
-                        <span>kWh</span>
-                    </md-field>     
-                </div>
-            </div> -->
           </md-card-content>
         <md-card-actions>
           <md-button type="submit" class="md-primary" :disabled="sending">Create green credit</md-button>
@@ -81,6 +38,7 @@
 
 <script>
   import * as apiService from "../services/apiService";
+  import * as energyEnum from "@/enum/EnergyType";
   import { validationMixin } from 'vuelidate';
   import {
     required,
@@ -102,6 +60,7 @@
       sending: false,
       snackBarMsg: null,
       showSnackbar: false,
+      energyTypes: energyEnum.EnergyType,
     }),
     validations: {
       form: {

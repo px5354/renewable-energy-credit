@@ -16,9 +16,10 @@ function buildIssueAmountForm(form) {
 
 function buildTransferAssetForm(form) {
   return {
-    RecipientEmail: form.email,
+    RecipientEmail: form.recipientEmail,
     Amount: form.amount,
     FactoryId: form.factoryId,
+    SenderEmail: form.senderEmail,
   };
 }
 
@@ -75,7 +76,7 @@ export const issueAmount = (form) => axios({
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 
-export const transferAsset = (form) => axios({
+export const transferAmount = (form) => axios({
   method: 'post',
   baseURL: 'http://localhost:43056',
   url: 'api/tracker/wallet/transfer',

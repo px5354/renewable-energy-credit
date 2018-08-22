@@ -10,5 +10,6 @@ namespace RenewableEnergyCredits.Models
         public string RecipientEmail { get; set; }
         public string FactoryId { get; set; }
         public int Amount { get; set; }
+        public string SenderEmail { get; set; }
     }
 }

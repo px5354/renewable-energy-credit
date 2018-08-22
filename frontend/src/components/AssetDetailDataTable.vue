@@ -26,7 +26,7 @@
           <md-icon>arrow_back</md-icon>
         </md-button>
         <h1 class="md-title">{{ title }}</h1>
-        <issuebtn :energyDisplayName="title"/>
+        <issuebtn :energyDisplayName="title" :energyId="assetId"/>
       </md-table-toolbar>
       <span>No data to show</span> 
     </md-table>
@@ -45,6 +45,7 @@ import issuebtn from "@/components/IssueBtn";
     }),
     props: {
       title: String,
+      assetId: String,
       elements: Array,
       labels: Array,
     },
@@ -54,9 +55,8 @@ import issuebtn from "@/components/IssueBtn";
       },
     },
     mounted(){
-      console.log("mounted"); 
+      console.log("mounted");
       console.log(this.$route.params.assetId);     
-      console.log(this.elements);
   },
   }
 </script>

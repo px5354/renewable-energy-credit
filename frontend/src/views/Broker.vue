@@ -2,7 +2,7 @@
   <div>
     <headerbar/>
     <titlecard title="Broker"/>
-    <!-- <div v-if="dataLoaded"> -->
+    <div v-if="dataLoaded">
       <div>
         <md-radio
           v-for="(item) in Object.values(this.energyTypes)"
@@ -20,10 +20,10 @@
         <datatable title="BUY ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="orderBookData.buy" />
         <datatable title="SELL ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="orderBookData.sell" />
       </div>
-    <!-- </div> -->
-    <!-- <div v-else>
+    </div>
+    <div v-else>
       <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -78,7 +78,7 @@ export default {
       this.dataLoaded = true;
     },
     energyRadio(newData, oldData) {
-      this.refreshInitData();
+      this.loadInitData();
       this.resetForm();
     }
   },
@@ -93,21 +93,52 @@ export default {
   methods: {
     getBalances() {
       apiService.getBalances()
-        .then(body => (this.balances = body.data));
+        .then(body => {
+          console.log(body);
+          this.balances = body.data;
+        });
     },
     resetForm() {
       this.form = {
         buy: {
           price: null,
           amount: null,
-          total: null,
         },
         sell: {
           price: null,
           amount: null,
-          total: null,
         },
       };
+    },
+    setFormEmailsReceive() {
+      this.form.recipientEmail = "gabriel@mantle.services";
+      this.form.senderEmail = "philippe@mantle.services";
+    },
+    setFormEmailsSend() {
+      this.form.recipientEmail = "gabriel@mantle.services";
+      this.form.senderEmail = "philippe@mantle.services";
+    },
+    buyEnergy() {
+      this.setFormEmailsReceive();
+      apiService.transferAmount(this.form)
+        .then(body => {
+          console.log(body);
+
+        });
+    },
+    sellEnergy() {
+      apiService.transferAmount(this.form)
+        .then(body => {
+          console.log(body);
+
+        });
+    },
+    fetchFactoryIds() {
+      apiService.getAssets()
+        .then(body => {
+          console.log(body.data);
+          this.dataLoaded = true;
+        });
     },
     mockNewOrder() {
       this.$nextTick(function () {
@@ -126,11 +157,10 @@ export default {
               amount: utils.generateRandomNumber(0.001, 2.123),
             }
           );
-          // this.refreshInitData();
         }, 5000);
       });
     },
-    refreshInitData() {
+    loadInitData() {
       this.orderBookData.buy = [];
       this.orderBookData.sell = [];
       this.orderBookData.buy = utils.generateInitialData(500, 1000, 0.001, 2.123, 30, true);
@@ -138,13 +168,12 @@ export default {
     },
   },
   mounted(){
-    this.refreshInitData();
-    this.getBalances();
+    this.loadInitData();
+    this.fetchFactoryIds();
     this.mockNewOrder();
   },
   // updated() {
   //   console.log("updated");
-  //   // this.refreshInitData();
   // }
 };
 </script>

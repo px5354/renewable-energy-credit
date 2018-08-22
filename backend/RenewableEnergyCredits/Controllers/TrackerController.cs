@@ -158,9 +158,20 @@ namespace RenewableEnergyCredits.Controllers
 //        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         public async Task<IActionResult> TransferAssetAmount([FromBody] TransferRequest tr)
         {
+            var config = new Configuration
+            {
+                BasePath = "https://dev.api.mantle.services"
+            };
+            var auth = new AuthenticationApi(config);
+            var userResponse =
+                await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
+                    tr.SenderEmail, "Test1234"));
+            config.AddDefaultHeader("Authorization", userResponse.AccessToken);
+            var localTracker = new TrackerApi(config);
+            
             try
             {
-                await _mantleTracker.TrackerWalletTransferPostAsync(
+                await localTracker.TrackerWalletTransferPostAsync(
                     new TrackerTransferRequest(tr.RecipientEmail, tr.Amount, tr.FactoryId));
                 return StatusCode(StatusCodes.Status201Created);
             }

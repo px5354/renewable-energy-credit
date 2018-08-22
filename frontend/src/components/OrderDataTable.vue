@@ -23,7 +23,7 @@
         </md-table-cell> -->
         <md-table-cell md-label="Price (CAD)" md-numeric>{{ item.price.toFixed(3) }}</md-table-cell>
         <md-table-cell :md-label="`Amount(${energyType.shortName})`" md-numeric>{{ item.amount.toFixed(3) }}</md-table-cell>
-        <md-table-cell md-label="Sum(CAD)" md-numeric>{{ getSumMoneyAmount(item) }}</md-table-cell>
+        <md-table-cell md-label="Sum(CAD)" md-numeric>{{ item.total.toFixed(3) }}</md-table-cell>
       </md-table-row>
     </md-table>
   </div>
@@ -45,6 +45,7 @@ export default {
     amount: null,
     total: null,
     sending: false,
+    currentSum: 0,
     // orderData: [
     //   {
     //     price: 1000,
@@ -54,8 +55,13 @@ export default {
   }),
   methods: {
     getSumMoneyAmount(e) {
+      // this.currentSum += e.price * e.amount;
       return (e.price * e.amount).toFixed(3);
+      // return this.currentSum.toFixed(3);
     }
+  },
+  mounted() {
+    this.currentSum = 0;
   },
 };
 </script>

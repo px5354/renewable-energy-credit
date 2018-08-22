@@ -1,1 +1,1 @@
-# graduation-checker
+# energy-credits

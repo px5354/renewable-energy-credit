@@ -55,8 +55,8 @@ import issuebtn from "@/components/IssueBtn";
       },
     },
     mounted(){
-      console.log("mounted");
-      console.log(this.$route.params.assetId);     
+      // console.log("mounted");
+      // console.log(this.$route.params.assetId);     
   },
   }
 </script>

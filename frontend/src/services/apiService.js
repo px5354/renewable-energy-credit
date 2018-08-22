@@ -18,35 +18,10 @@ function buildTransferAssetForm(form) {
   return {
     RecipientEmail: form.recipientEmail,
     Amount: form.amount,
-    FactoryId: form.factoryId,
+    AssetId: form.assetId,
     SenderEmail: form.senderEmail,
   };
 }
-
-export const getUniversities = () => axios({
-  method: 'get',
-  baseURL: 'https://graduationchecker.azurewebsites.net',
-  url: 'api/data/university',
-});
-
-export const getPrograms = (universityId, degree, year) => axios({
-  method: 'get',
-  baseURL: 'https://graduationchecker.azurewebsites.net',
-  url: 'api/data/program',
-  params: {
-    universityId,
-    degree,
-    year,
-  },
-});
-
-export const verifyCertificate = form => axios({
-  method: 'post',
-  baseURL: 'https://graduationchecker.azurewebsites.net',
-  url: 'api/keeper',
-  data: build(form),
-  config: { headers: { 'Content-Type': 'application/json' } },
-});
 
 export const createAsset = (form) => axios({
   method: 'post',

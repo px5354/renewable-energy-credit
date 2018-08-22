@@ -50,17 +50,15 @@
 <script>
 export default {
   name: "formcard",
-  props: ['title', 'energyType','marketValue', 'formData', 'onSubmit'],
+  props: ['title', 'energyType','marketValue', 'formData', 'onSubmit' , 'sending'],
   props: {
     title: String,
     energyType: Object,
     marketValue: Number,
     formData: Object,
     onSubmit: Function,
+    sending: Boolean,
   },
-  data: () => ({
-    sending: false,
-  }),
   computed: {
     total: {
       get() {
@@ -70,7 +68,6 @@ export default {
           return null;
         }
       },
-      // setter
       set(newValue) {
         
       }

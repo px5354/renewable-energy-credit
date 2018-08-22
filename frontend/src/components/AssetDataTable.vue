@@ -45,8 +45,8 @@
       }
     },
     mounted(){
-      console.log("mounted");
-      console.log(this.elements);
+      // console.log("mounted");
+      // console.log(this.elements);
   },
   }
 </script>

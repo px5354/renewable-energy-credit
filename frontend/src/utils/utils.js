@@ -27,9 +27,6 @@ export const generateInitialData = (minA, maxA, minB, maxB, n, reverseOrder) => 
       amount: generateRandomNumber(minB, maxB),
     });
   }
-  // data = data.sort((a, b) => {
-  //   return a.price > b.price;
-  // });
   return data.sort((a,b) => {
     if(reverseOrder){
       return (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0);
@@ -37,4 +34,30 @@ export const generateInitialData = (minA, maxA, minB, maxB, n, reverseOrder) => 
       return (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0);
     }
   });
+};
+
+export const generateData = (min, n) => {
+  let data = [];
+  data.push(min);
+  for(let i=1; i<n; i++) {
+    data.push(data[i-1] + generateRandomNumber(20, 60))
+  }
+  let buys = data.slice(0, data.length/2).reverse();
+  let sells = data.slice(data.length/2, data.length + 1);
+  let buyResults = [];
+  let sellResults = [];
+  for(let i=0; i<data.length/2; i++){
+    buyResults.push({
+      price: buys[i],
+      amount: generateRandomNumber(0.001, 2.123),
+    });
+    sellResults.push({
+      price: sells[i],
+      amount: generateRandomNumber(0.001, 2.123),
+    });
+  }
+  return {
+    buy: buyResults,
+    sell: sellResults, 
+  };
 };

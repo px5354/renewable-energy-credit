@@ -58,20 +58,6 @@ namespace RenewableEnergyCredits
 //                return config;
 //            });
 
-            services.AddSingleton(sqlConnection =>
-            {
-                var builder = new SqlConnectionStringBuilder
-                {
-                    DataSource = "mantleservices.database.windows.net",
-                    UserID = "mantleservices",
-                    Password = "builtwithBAAS2018",
-                    InitialCatalog = "graduationchecker"
-                };
-                return new SqlConnection(builder.ConnectionString);
-            });
-
-            services.AddScoped<IDatabase, Database>();
-
             var corsBuilder = new CorsPolicyBuilder();
             corsBuilder.AllowAnyHeader();
             corsBuilder.AllowAnyMethod();

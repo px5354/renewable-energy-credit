@@ -28,8 +28,7 @@
           {{ item.remainingAmount }}
         </md-table-cell>
         <md-table-cell class="text-row table-btn">
-          <sellbtn v-if="item.displayName != 'CAD'" :selectedAsset="item"/>
-          <buybtn v-else :selectedAsset="item"/>
+          <transferbtn :selectedAsset="item"/>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -37,14 +36,12 @@
 </template>
 
 <script>
-  import sellbtn from "@/components/SellBtn";
-  import buybtn from "@/components/BuyBtn";
+  import transferbtn from "@/components/TransferBtn";
   export default {
     name: 'transferdatatable',
     props: ['title', 'elements', 'labels'],
     components: {
-      sellbtn,
-      buybtn,
+      transferbtn,
     },
     data: () => ({
     }),
@@ -54,13 +51,9 @@
       labels: Array,
     },
     methods: {
-      onSelect(item){
-        this.$router.push({ path: `/producer/${item.id}` });
-      }
     },
     mounted(){
-      console.log("mounted");
-      console.log(this.elements);
+      // console.log("mounted");
     },
   }
 </script>

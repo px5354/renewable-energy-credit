@@ -13,13 +13,16 @@
         </md-radio>
       </div>
       <div>
-        <formcard title="BUY" :energyType="energyTypes[energyRadio]" :marketValue="marketBuyPrice" :formData="form.buy" :onSubmit="buyEnergy" />
-        <formcard title="SELL" :energyType="energyTypes[energyRadio]" :marketValue="marketSellPrice" :formData="form.sell" :onSubmit="sellEnergy" />
+        <formcard title="BUY" :energyType="energyTypes[energyRadio]" :marketValue="marketBuyPrice" :formData="form.buy" :onSubmit="buyEnergy" :sending="sendingBuy" />
+        <formcard title="SELL" :energyType="energyTypes[energyRadio]" :marketValue="marketSellPrice" :formData="form.sell" :onSubmit="sellEnergy" :sending="sendingSell"/>
       </div>
       <div>
-        <datatable title="BUY ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="orderBookData.buy" />
-        <datatable title="SELL ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="orderBookData.sell" />
+        <datatable title="BUY ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="buyOrderBook" />
+        <datatable title="SELL ORDERS" :energyType="energyTypes[energyRadio]" :orderBookData="sellOrderBook" />
       </div>
+      <md-snackbar md-position="left" :md-duration="3000" :md-active.sync="showSnackbar" md-persistent>
+        <span>{{ snackBarMsg }}</span>
+      </md-snackbar>
     </div>
     <div v-else>
       <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
@@ -46,10 +49,16 @@ export default {
   data: () => ({
     balances: null,
     dataLoaded: false,
+    snackBarMsg: null,
+    showSnackbar: false,
     energyRadio: energyEnum.EnergyType.WindPower.value,
     energyTypes: energyEnum.EnergyType,
     energyAssets: null,
     currencyAssets: null,
+    recipientEmail: null,
+    senderEmail: null,
+    sendingBuy: false,
+    sendingSell: false,
     form: {
       buy: {
         price: null,
@@ -86,11 +95,41 @@ export default {
   },
   computed: {
     marketBuyPrice() {
-      return this.orderBookData.buy[0].price;
-    },
-    marketSellPrice() {
       return this.orderBookData.sell[0].price;
     },
+    marketSellPrice() {
+      return this.orderBookData.buy[0].price;
+    },
+    buyOrderBook() {
+      let currentSum = 0;
+      let results = [];
+      this.orderBookData.buy.forEach(e => {
+        currentSum += e.price * e.amount;
+        results.push(
+          {
+            price: e.price,
+            amount: e.amount,
+            total: currentSum,
+          }
+        )
+      });
+      return results;
+    },
+    sellOrderBook() {
+      let currentSum = 0;
+      let results = [];
+      this.orderBookData.sell.forEach(e => {
+        currentSum += e.price * e.amount;
+        results.push(
+          {
+            price: e.price,
+            amount: e.amount,
+            total: currentSum,
+          }
+        )
+      });
+      return results;
+    },    
   },
   methods: {
     getBalances() {
@@ -128,45 +167,106 @@ export default {
       };
     },
     setFormEmailsReceive() {
-      this.form.recipientEmail = "philippe@mantle.services";
-      this.form.senderEmail = "gabriel@mantle.services";
+      this.recipientEmail = "philippe@mantle.services";
+      this.senderEmail = "gabriel@mantle.services";
     },
     setFormEmailsSend() {
-      this.form.recipientEmail = "gabriel@mantle.services";
-      this.form.senderEmail = "philippe@mantle.services";
+      this.recipientEmail = "gabriel@mantle.services";
+      this.senderEmail = "philippe@mantle.services";
+    },
+    getApiForm(assetId, opsType, amountType) {
+      return {
+        senderEmail: this.senderEmail,        
+        amount: amountType == "price" ? this.form[opsType].price *  this.form[opsType].amount: this.form[opsType][amountType],
+        assetId: assetId,
+        recipientEmail: this.recipientEmail,
+      }
     },
     buyEnergy() {
       this.setFormEmailsReceive();
-      console.log(this.form.senderEmail);
-      console.log(this.form.buy.amount);
-      console.log(this.form.recipientEmail);
-      this.setFormEmailsSend();
-      console.log(this.form.senderEmail);
-      console.log(this.form.buy.price);
-      console.log(this.form.recipientEmail);
-      // this.resetBuyForm();
-      // apiService.transferAmount(this.form)
-      //   .then(body => {
-      //     console.log(body);
-
-      //   });
+      this.sendingBuy = true;
+      const assetId = this.energyAssets.find(e => e.name == energyEnum.EnergyType[this.energyRadio].shortName).id;
+      apiService.transferAmount(this.getApiForm(assetId, "buy", "amount"))
+        .then(() => {
+          console.log("first transfer successful");
+          this.setFormEmailsSend();        
+          apiService.transferAmount(this.getApiForm(this.currencyAssets[0].id, "buy", "price"))
+            .then(() => {
+              this.snackBarMsg = "Transaction Sucessful";
+              console.log("second transfer successful");
+              this.showSnackbar = true;
+              this.sendingBuy = false;
+              this.resetForm();
+            })
+            .catch((error) => {
+              if (error.response) {
+                  this.snackBarMsg = error.response.data;
+              } else if (error.request) {
+                  this.snackBarMsg = error.request;
+              } else {
+                  this.snackBarMsg = error.message;
+              }
+              this.showSnackbar = true;
+              this.sendingBuy = false;
+              this.resetForm();
+            });
+        })
+        .catch((error) => {
+          if (error.response) {
+              this.snackBarMsg = error.response.data;
+          } else if (error.request) {
+              this.snackBarMsg = error.request;
+          } else {
+              this.snackBarMsg = error.message;
+          }
+          this.showSnackbar = true;
+          this.sendingBuy = false;
+          this.resetForm();
+        });
     },
     sellEnergy() {
       this.setFormEmailsReceive();
-      console.log(this.form.senderEmail);
-      console.log(this.form.sell.price);
-      console.log(this.form.recipientEmail);
-      this.setFormEmailsSend();
-      console.log(this.form.senderEmail);
-      console.log(this.form.sell.amount);
-      console.log(this.form.recipientEmail);
-      // apiService.transferAmount(this.form)
-      //   .then(body => {
-      //     console.log(body);
-
-      //   });
+      this.sendingSell = true;    
+      apiService.transferAmount(this.getApiForm(this.currencyAssets[0].id, "sell", "price"))
+        .then(() => {
+          console.log("first transfer successful");
+          this.setFormEmailsSend();
+          const assetId = this.energyAssets.find(e => e.name == energyEnum.EnergyType[this.energyRadio].shortName).id;
+          apiService.transferAmount(this.getApiForm(assetId, "sell", "amount"))
+            .then(() => {
+              this.snackBarMsg = "Transaction Sucessful";
+              console.log("second transfer successful");
+              this.showSnackbar = true;
+              this.sendingSell = false;
+              this.resetForm();
+            })
+            .catch((error) => {
+              if (error.response) {
+                  this.snackBarMsg = error.response.data;
+              } else if (error.request) {
+                  this.snackBarMsg = error.request;
+              } else {
+                  this.snackBarMsg = error.message;
+              }
+              this.showSnackbar = true;
+              this.sendingSell = false;
+              this.resetForm();
+            });
+        })
+        .catch((error) => {
+          if (error.response) {
+              this.snackBarMsg = error.response.data;
+          } else if (error.request) {
+              this.snackBarMsg = error.request;
+          } else {
+              this.snackBarMsg = error.message;
+          }
+          this.showSnackbar = true;
+          this.sendingSell = false;
+          this.resetForm();
+        });
     },
-    fetchFactoryIds() {
+    fetchAssetIds() {
       apiService.getAssets()
         .then(body => {
           this.energyAssets = body.data.filter(asset => Object.values(energyEnum.EnergyType).map(e => e.shortName).includes(asset.name));
@@ -177,34 +277,36 @@ export default {
     mockNewOrder() {
       this.$nextTick(function () {
         window.setInterval(() => {
-          this.orderBookData.buy.pop();
-          this.orderBookData.buy.unshift(
-            {
-              price: utils.generateRandomNumber(this.orderBookData.buy[0].price + 0.001, this.orderBookData.buy[0].price + 5),
-              amount: utils.generateRandomNumber(0.001, 3.123),
-            }
-          );
-          this.orderBookData.sell.pop();
-          this.orderBookData.sell.unshift(
-            {
-              price: utils.generateRandomNumber(this.orderBookData.sell[0].price - 0.001, this.orderBookData.sell[0].price - 2),
-              amount: utils.generateRandomNumber(0.001, 2.123),
-            }
-          );
-        }, 5000);
+          this.orderBookData = utils.generateData(3000, 60);
+          // this.orderBookData.buy.pop();
+          // this.orderBookData.buy.unshift(
+          //   {
+          //     price: utils.generateRandomNumber(this.orderBookData.buy[0].price + 0.001, this.orderBookData.buy[0].price + 5),
+          //     amount: utils.generateRandomNumber(0.001, 3.123),
+          //   }
+          // );
+          // this.orderBookData.sell.pop();
+          // this.orderBookData.sell.unshift(
+          //   {
+          //     price: utils.generateRandomNumber(this.orderBookData.sell[0].price - 0.001, this.orderBookData.sell[0].price - 2),
+          //     amount: utils.generateRandomNumber(0.001, 2.123),
+          //   }
+          // );
+        }, 500);
       });
     },
     loadInitData() {
       this.orderBookData.buy = [];
       this.orderBookData.sell = [];
-      this.orderBookData.buy = utils.generateInitialData(500, 1000, 0.001, 2.123, 30, true);
-      this.orderBookData.sell = utils.generateInitialData(500, 1000, 0.001, 3.123, 30, false);
+      this.orderBookData = utils.generateData(3000, 60);
+      // this.orderBookData.buy = utils.generateInitialData(5000, 10000, 0.001, 2.123, 30, true);
+      // this.orderBookData.sell = utils.generateInitialData(5000, 10000, 0.001, 3.123, 30, false);
     },
   },
   mounted(){
     this.loadInitData();
-    this.fetchFactoryIds();
-    this.mockNewOrder();
+    this.fetchAssetIds();
+    this.mockNewOrder();    
   },
   // updated() {
   //   console.log("updated");

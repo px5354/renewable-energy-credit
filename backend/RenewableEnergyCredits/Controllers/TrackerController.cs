@@ -22,14 +22,12 @@ namespace RenewableEnergyCredits.Controllers
     [Route("api/[controller]")]
     public class TrackerController : Controller
     {
-        private readonly IDatabase _database;
         private readonly TrackerApi _mantleTracker;
 //        private readonly TrackerApi _mantleTrackerClient;
         private readonly string _email;
 
-        public TrackerController(IDatabase database, Task<Configuration> mantleConfigProducer, Task<Configuration> mantleConfigClient)
+        public TrackerController(Task<Configuration> mantleConfigProducer, Task<Configuration> mantleConfigClient)
         {
-            _database = database;
             _mantleTracker = new TrackerApi(mantleConfigProducer.Result);
 //            _mantleTrackerClient = new TrackerApi(mantleConfigClient.Result);
         }
@@ -119,23 +117,6 @@ namespace RenewableEnergyCredits.Controllers
             }
             //            return StatusCode(StatusCodes.Status200OK);
         }
-        
-        /// <summary>
-        /// Get all of the assets that have been created in Tracker. Requires the Tracker Admin Role.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("transactions")]
-//        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTransactions()
-        {
-//            var assets = await _mediator.Send(new GetAssetsQuery(token.ClientId));
-//            Console.WriteLine(greenCredit);
-//            var transactions = await _mantleTracker.TrackerTransactionsSelfGetAsync();
-            var transactions = await _mantleTracker.TrackerTransactionsSelfGetAsync();
-            return Ok(transactions);
-            //            return StatusCode(StatusCodes.Status200OK);
-        }
         /// <summary>
         /// Get all of the assets that have been created in Tracker. Requires the Tracker Admin Role.
         /// </summary>
@@ -148,6 +129,19 @@ namespace RenewableEnergyCredits.Controllers
             return Ok(balances);
             //            return StatusCode(StatusCodes.Status200OK);
         }
+        
+        /// <summary>
+        /// Get all of the transactions that have been created in Tracker. Requires the Tracker Admin Role.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("transactions")]
+        public async Task<IActionResult> GetTransactions()
+        {        
+            var transactions = await _mantleTracker.TrackerTransactionsGetAsync(DateTime.Now, 50, 50);
+            return Ok(transactions);
+            //            return StatusCode(StatusCodes.Status200OK);
+        }        
         
         /// <summary>
         /// Transfer a certain amount of your asset to a recipient.
@@ -172,7 +166,7 @@ namespace RenewableEnergyCredits.Controllers
             try
             {
                 await localTracker.TrackerWalletTransferPostAsync(
-                    new TrackerTransferRequest(tr.RecipientEmail, tr.Amount, tr.FactoryId));
+                    new TrackerTransferRequest(tr.RecipientEmail, tr.Amount, tr.AssetId));
                 return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception e)

@@ -8,7 +8,7 @@ namespace RenewableEnergyCredits.Models
     public class TransferRequest
     {        
         public string RecipientEmail { get; set; }
-        public string FactoryId { get; set; }
+        public string AssetId { get; set; }
         public int Amount { get; set; }
         public string SenderEmail { get; set; }
     }

@@ -29,9 +29,6 @@
         <md-table-cell md-label="Creation Date" class="text-row">
           {{ getData(item.timestamp) }}
         </md-table-cell>
-        <md-tooltip v-if="item.blockchainStatus!='Confirmed'" md-direction="right">
-          Applying operations in blockchain
-        </md-tooltip>      
       </md-table-row>
     </md-table>
   </div>

@@ -81,9 +81,10 @@
   export default {
     name: "issuebtn",
     mixins: [validationMixin],
-    props: ['energyDisplayName'],
+    props: ['energyDisplayName', 'afterIssueAmount'],
     props: {
       energyDisplayName: String,
+      afterIssueAmount: Function,
     },
     data: () => ({
       showDialog: false,
@@ -151,6 +152,7 @@
             this.showSnackbar = true;
             this.sending = false;
             this.clearForm();
+            this.afterIssueAmount();
           });
       },
       validateUser () {

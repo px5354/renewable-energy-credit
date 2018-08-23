@@ -52,7 +52,7 @@
           return {
             id: e.id,
             status: e.blockchainStatus,
-            factoryId: e.factoryId,
+            assetId: e.assetId,
             recipient: e.recipientDisplayName,
             amount: e.amount,
             date: moment(e.timestamp).format('MMM Do YYYY, h:mm:ss a'),
@@ -61,13 +61,13 @@
       },
 
       getEnergyType() {
-        return this.energyDetails ? this.energyDetails.factoryDisplayName : null;
+        return this.energyDetails ? this.energyDetails.assetDisplayName : null;
       }
     },
     methods: {
       fetchGreenAssetDetail(assetId) {
         apiService.getAssetDetails(assetId)
-        .then(body => (this.energyDetails = body.data));
+        .then(body =>(this.energyDetails = body.data));
       },
     },
     mounted(){

@@ -7,7 +7,7 @@
         <walletdatatable title="Wallet" :elements="balances"/>
       </div>
       <div>
-        <transdatatable title="Transactions" :elements="transactions"/>
+        <transdatatable title="Transactions" :elements="transactions" :afterIssueAmount="afterIssueAmount"/>
       </div>
     </div>
     <div v-else>
@@ -61,6 +61,9 @@ export default {
               return (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0);
             })
         ));
+    },
+    afterIssueAmount() {
+      this.$vm.$forceUpdate();
     }
   },
   mounted(){

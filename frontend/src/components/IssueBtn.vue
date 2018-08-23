@@ -130,7 +130,7 @@
       },
       issueAmount () {
         this.form.energyId = this.$route.params.assetId;
-        this.form.email = "philippe@mantle.services";
+        this.form.email = "pascalmaster62@gmail.com";
         this.sending = true;
         console.log(this.form);
         apiService.issueAmount(this.form)

@@ -167,12 +167,12 @@ export default {
       };
     },
     setFormEmailsReceive() {
-      this.recipientEmail = "philippe@mantle.services";
-      this.senderEmail = "gabriel@mantle.services";
+      this.recipientEmail = "pascalmaster62@mantle.services";
+      this.senderEmail = "mastersean853@mantle.services";
     },
     setFormEmailsSend() {
-      this.recipientEmail = "gabriel@mantle.services";
-      this.senderEmail = "philippe@mantle.services";
+      this.recipientEmail = "mastersean853@mantle.services";
+      this.senderEmail = "pascalmaster62@mantle.services";
     },
     getApiForm(assetId, opsType, amountType) {
       return {

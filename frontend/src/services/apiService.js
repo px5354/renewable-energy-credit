@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const azureUrl = 'https://renewableenergycredits.azurewebsites.net';
-// http://localhost:43056
+const azureUrl = 
+'https://renewableenergycredits.azurewebsites.net';
+// 'http://localhost:43056';
 
 function buildCreateAssetForm(form) {
   return {

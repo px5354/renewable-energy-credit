@@ -39,7 +39,8 @@ namespace RenewableEnergyCredits
                 var auth = new AuthenticationApi(config);
                 var userResponse =
                     await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
-                        "philippe@mantle.services", "Test1234"));
+//                        "philippe@mantle.services", "Test1234"));
+                        "pascalmaster62@gmail.com", "Test1234"));
                 config.AddDefaultHeader("Authorization", userResponse.AccessToken);
                 return config;
             });

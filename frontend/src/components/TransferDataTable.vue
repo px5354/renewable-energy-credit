@@ -28,7 +28,7 @@
           {{ item.remainingAmount }}
         </md-table-cell>
         <md-table-cell class="text-row table-btn">
-          <transferbtn :selectedAsset="item" :afterIssueAmount="afterIssueAmount"/>
+          <transferbtn :selectedAsset="item"/>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -39,7 +39,7 @@
   import transferbtn from "@/components/TransferBtn";
   export default {
     name: 'transferdatatable',
-    props: ['title', 'elements', 'labels', 'afterIssueAmount'],
+    props: ['title', 'elements', 'labels'],
     components: {
       transferbtn,
     },
@@ -49,7 +49,6 @@
       title: String,
       elements: Array,
       labels: Array,
-      afterIssueAmount: Function,
     },
     methods: {
     },

@@ -7,7 +7,7 @@
         <walletdatatable title="Wallet" :elements="balances"/>
       </div>
       <div>
-        <transdatatable title="Transactions" :elements="transactions" :afterIssueAmount="afterIssueAmount"/>
+        <transdatatable title="Transactions" :elements="transactions"/>
       </div>
     </div>
     <div v-else>
@@ -62,9 +62,6 @@ export default {
             })
         ));
     },
-    afterIssueAmount() {
-      this.$vm.$forceUpdate();
-    }
   },
   mounted(){
     this.getBalances();

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const azureUrl = 
-'https://renewableenergycredits.azurewebsites.net';
-// 'http://localhost:43056';
+const backendUrl = 
+// 'https://renewableenergycredits.azurewebsites.net';
+'http://localhost:43056';
 
 function buildCreateAssetForm(form) {
   return {
@@ -29,49 +29,49 @@ function buildTransferAssetForm(form) {
 
 export const createAsset = (form) => axios({
   method: 'post',
-  baseURL: azureUrl,
-  url: 'api/tracker',
+  baseURL: backendUrl,
+  url: 'api/energycredits',
   data: buildCreateAssetForm(form),
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 
 export const getAssets = () => axios({
   method: 'get',
-  baseURL: azureUrl,
-  url: 'api/tracker/assets',
+  baseURL: backendUrl,
+  url: 'api/energycredits/assets',
 });
 
 export const getAssetDetails = (assetId) => axios({
   method: 'get',
-  baseURL: azureUrl,
-  url: `api/tracker/assets/issuedbatches/${assetId}`,
+  baseURL: backendUrl,
+  url: `api/energycredits/assets/issuedbatches/${assetId}`,
 });
 
 export const issueAmount = (form) => axios({
   method: 'post',
-  baseURL: azureUrl,
-  url: 'api/tracker/assets/issue',
+  baseURL: backendUrl,
+  url: 'api/energycredits/assets/issue',
   data: buildIssueAmountForm(form),
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 
 export const transferAmount = (form) => axios({
   method: 'post',
-  baseURL: azureUrl,
-  url: 'api/tracker/wallet/transfer',
+  baseURL: backendUrl,
+  url: 'api/energycredits/wallet/transfer',
   data: buildTransferAssetForm(form),
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 
 export const getTransactions = () => axios({
   method: 'get',
-  baseURL: azureUrl,
-  url: 'api/tracker/transactions',
+  baseURL: backendUrl,
+  url: 'api/energycredits/transactions',
 });
 
 export const getBalances = () => axios({
   method: 'get',
-  baseURL: azureUrl,
+  baseURL: backendUrl,
   url: 'api/tracker/balances',
 });
 

@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using mantle.lib.Api;
-using mantle.lib.Client;
-using mantle.lib.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace RenewableEnergyCredits
 {
@@ -30,20 +21,17 @@ namespace RenewableEnergyCredits
         {
             services.AddMvc();
 
-            services.AddSingleton(async mantleConfigProducer =>
-            {
-                var config = new Configuration
-                {
-                    BasePath = "https://dev.api.mantle.services"
-                };
-                var auth = new AuthenticationApi(config);
-                var userResponse =
-                    await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
-//                        "philippe@mantle.services", "Test1234"));
-                        "pascalmaster62@gmail.com", "Test1234"));
-                config.AddDefaultHeader("Authorization", userResponse.AccessToken);
-                return config;
-            });
+//            services.AddSingleton(restClient =>
+//            {
+//                var client = new RestClient
+//                {
+//                    BaseUrl = new Uri("https://develop.api.mantleblockchain.com")
+//                };
+//                client.AddDefaultHeader("Content-type", "application/json; charset=utf-8");
+//                client.AddDefaultHeader("x-api-key", "0NB1tkB0++UE3Qie3MiFur401AJIyD1ZBxoLcqMw9NA=");
+//
+//                return client;
+//            });
             
 //            services.AddSingleton(async mantleConfigClient =>
 //            {

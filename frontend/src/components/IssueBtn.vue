@@ -5,39 +5,11 @@
       <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item">
         <md-card-content>
-            <!-- <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('firstName')">
-                    <label for="first-name">First Name</label>
-                    <md-input name="first-name" id="first-name" autocomplete="given-name" v-model="form.firstName" :disabled="sending" />
-                    <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-                    <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span>
-                </md-field>
-                </div>
-
-                <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('lastName')">
-                    <label for="last-name">Last Name</label>
-                    <md-input name="last-name" id="last-name" autocomplete="family-name" v-model="form.lastName" :disabled="sending" />
-                    <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
-                    <span class="md-error" v-else-if="!$v.form.lastName.minlength">Invalid last name</span>
-                </md-field>
-                </div>
-            </div> -->
-
             <div class="md-layout-item md-small-size-100">
                 <md-field>
-                  <!-- <label for="energyType">Asset</label> -->
                   <span>{{ energyDisplayName }}</span>
                 </md-field>
             </div>
-
-            <!-- <md-field :class="getValidationClass('email')">
-                <label for="email">Email</label>
-                <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-                <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
-            </md-field> -->
             <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                     <md-field :class="getValidationClass('quantity')">
@@ -62,9 +34,6 @@
     <md-button class="md-icon-button md-raised md-primary" @click="showDialog=true">
       <md-icon>library_add</md-icon>
     </md-button>
-    <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
-        <md-icon>add_circle_outline</md-icon> Create a green credit
-    </md-button> -->
   </div>
 </template>
 
@@ -81,9 +50,10 @@
   export default {
     name: "issuebtn",
     mixins: [validationMixin],
-    props: ['energyDisplayName'],
+    props: ['energyDisplayName', 'assetId'],
     props: {
       energyDisplayName: String,
+      assetId: String,
     },
     data: () => ({
       showDialog: false,
@@ -97,6 +67,8 @@
       sending: false,
       snackBarMsg: null,
       showSnackbar: false,
+      //TODO: Implement logic to fetch the user's email
+      userEmail: 'user-email',
     }),
     validations: {
       form: {
@@ -104,13 +76,6 @@
           required,
           minValue: minValue(1),
         },
-        // energyType: {
-        //   required
-        // },
-        // email: {
-        //   required,
-        //   email
-        // }
       }
     },
     methods: {
@@ -129,11 +94,10 @@
         this.form.energyType = null
       },
       issueAmount () {
-        this.form.energyId = this.$route.params.assetId;
-        this.form.email = "pascalmaster62@gmail.com";
+        this.form.energyId = this.assetId;
+        this.form.email = this.userEmail;
         this.sending = true;
-        console.log(this.form);
-        apiService.issueAmount(this.form)
+        apiService.issueGreenCredits(this.form)
           .then(() => {            
             this.assetCreated = true;
             this.snackBarMsg = "Energy issued.";

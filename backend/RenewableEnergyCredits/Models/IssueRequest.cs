@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RenewableEnergyCredits.Models
 {
-    public class AssetIssueRequest
+    public class IssueRequest
     {
         public string AssetId { get; set; }
         public string RecipientEmail { get; set; }

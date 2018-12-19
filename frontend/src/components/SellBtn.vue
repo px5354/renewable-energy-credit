@@ -2,7 +2,7 @@
   <div class="create-btn-container">
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-title>Sell energy ressources</md-dialog-title>
-      <form novalidate class="md-layout" @submit.prevent="validateUser">
+      <form novalidate class="md-layout">
       <md-card class="md-layout-item">
         <md-card-area md-inset>
           <md-card-content>
@@ -13,14 +13,12 @@
             
             <div class="md-layout-item md-small-size-100">
                 <md-field>
-                  <!-- <label for="energyType">Asset</label> -->
                   <label for="energyType">EnergyType</label>
                   <md-input type="text" id="energyType" name="energyType" readonly :value="`${selectedAsset.displayName}`"/>
                 </md-field>
                 <md-field>
                   <label for="availableQty">Available</label>
                   <md-input type="text" id="availableQty" name="availableQty" readonly :value="`${selectedAsset.remainingAmount} kWh`"/>
-                  <!-- <span>{{ `Available: ${selectedAsset.amount} kWh` }}</span> -->
                 </md-field>
             </div>
             <div class="md-layout md-gutter">
@@ -88,9 +86,6 @@
       <md-icon>call_made</md-icon>
       <span>sell</span>
     </md-button>
-    <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
-        <md-icon>add_circle_outline</md-icon> Create a green credit
-    </md-button> -->
   </div>
 </template>
 
@@ -164,36 +159,6 @@
         this.form.quantity = null
         this.form.amount = null
         this.form.email = null
-      },
-      transferAmount () {
-        this.form.energyId = this.assetId;
-        this.sending = true
-        apiService.transferAmount(this.form)
-          .then(() => {            
-            this.assetCreated = true;
-            this.snackBarMsg = "Transfer success";
-            this.showSnackbar = true;
-            this.sending = false;
-            this.clearForm();
-          }).catch((error) => {
-            if (error.response) {
-                this.snackBarMsg = error.response.data;
-            } else if (error.request) {
-                this.snackBarMsg = error.request;
-            } else {
-                this.snackBarMsg = error.message;
-            }
-            this.showSnackbar = true;
-            this.sending = false;
-            this.clearForm();
-          });
-      },
-      validateUser () {
-        this.$v.$touch()
-
-        if (!this.$v.$invalid) {
-          // this.transferEnergy()
-        }
       },
     },
   };

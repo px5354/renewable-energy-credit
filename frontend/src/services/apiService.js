@@ -1,16 +1,8 @@
 import axios from 'axios';
 
-const backendUrl = 
-// 'https://renewableenergycredits.azurewebsites.net';
-'http://localhost:43056';
+const backendUrl = 'http://localhost:43056';
 
-function buildCreateAssetForm(form) {
-  return {
-    Type: form.energyType,
-  };
-}
-
-function buildIssueAmountForm(form) {
+function buildIssueForm(form) {
   return {
     AssetId: form.energyId,
     RecipientEmail: form.email,
@@ -18,60 +10,59 @@ function buildIssueAmountForm(form) {
   };
 }
 
-function buildTransferAssetForm(form) {
-  return {
-    RecipientEmail: form.recipientEmail,
-    Amount: parseInt(form.amount),
-    AssetId: form.assetId,
-    SenderEmail: form.senderEmail,
-  };
-}
-
-export const createAsset = (form) => axios({
+export const createGreenEnergy = (form) => axios({
   method: 'post',
   baseURL: backendUrl,
-  url: 'api/energycredits',
-  data: buildCreateAssetForm(form),
+  url: `api/energycredits/${form.energyType}`,
   config: { headers: { 'Content-Type': 'application/json' } },
 });
 
-export const getAssets = () => axios({
+export const getGreenEnergies = () => axios({
   method: 'get',
   baseURL: backendUrl,
-  url: 'api/energycredits/assets',
+  url: `api/energycredits`,
 });
 
-export const getAssetDetails = (assetId) => axios({
+export const getGreenEnergy = (greenEnergyId) => axios({
   method: 'get',
   baseURL: backendUrl,
-  url: `api/energycredits/assets/issuedbatches/${assetId}`,
+  url: `api/energycredits/${greenEnergyId}`,
 });
 
-export const issueAmount = (form) => axios({
+export const issueGreenCredits = (form) => axios({
   method: 'post',
   baseURL: backendUrl,
-  url: 'api/energycredits/assets/issue',
-  data: buildIssueAmountForm(form),
+  url: 'api/energycredits/issue',
+  data: buildIssueForm(form),
   config: { headers: { 'Content-Type': 'application/json' } },
-});
-
-export const transferAmount = (form) => axios({
-  method: 'post',
-  baseURL: backendUrl,
-  url: 'api/energycredits/wallet/transfer',
-  data: buildTransferAssetForm(form),
-  config: { headers: { 'Content-Type': 'application/json' } },
-});
-
-export const getTransactions = () => axios({
-  method: 'get',
-  baseURL: backendUrl,
-  url: 'api/energycredits/transactions',
 });
 
 export const getBalances = () => axios({
   method: 'get',
   baseURL: backendUrl,
-  url: 'api/tracker/balances',
+  url: 'api/energycredits/balances',
 });
 
+export const transferGreenCredits = () => {
+  // Call your endpoint of the backend
+};
+
+export const getBuyOrderBook = () => {
+  // Call your endpoint of the backend
+};
+
+export const getSellOrderBook = () => {
+  // Call your endpoint of the backend
+};
+
+export const buyGreenCredits = () => {
+  // Call your endpoint of the backend
+};
+
+export const sellGreenCredits = () => {
+  // Call your endpoint of the backend
+};
+
+export const das = () => {
+  // Call your endpoint of the backend
+};

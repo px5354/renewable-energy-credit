@@ -30,9 +30,6 @@
     <md-button class="md-icon-button md-raised md-primary" @click="showDialog=true">
       <md-icon>add</md-icon>
     </md-button>
-    <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
-        <md-icon>add_circle_outline</md-icon> Create a green credit
-    </md-button> -->
   </div>
 </template>
 
@@ -55,7 +52,6 @@
       dialogValue: null,
       form: {
         energyType: null,
-        // quantity: null,
       },
       sending: false,
       snackBarMsg: null,
@@ -64,18 +60,9 @@
     }),
     validations: {
       form: {
-        // quantity: {
-        //   required,
-        //   maxLength: maxLength(3),
-        //   minValue: minValue(1),
-        // },
         energyType: {
           required
         },
-        // email: {
-        //   required,
-        //   email
-        // }
       }
     },
     methods: {
@@ -95,9 +82,9 @@
       },
       createAsset () {
         this.sending = true;
-        apiService.createAsset(this.form)
+        apiService.createGreenEnergy(this.form)
           .then(() => {            
-            this.snackBarMsg = "New type of Green Credit created.";
+            this.snackBarMsg = "New type of green energy has been created.";
             this.showSnackbar = true;
             this.sending = false;
             this.clearForm();

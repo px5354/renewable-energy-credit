@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using RenewableEnergyCredits.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.KeyVault;
 using Newtonsoft.Json;
+using RenewableEnergyCredits.Config;
 using RestSharp;
 
 namespace RenewableEnergyCredits.Controllers
@@ -20,168 +23,115 @@ namespace RenewableEnergyCredits.Controllers
     [Route("api/[controller]")]
     public class EnergyCreditsController : Controller
     {
-        private readonly RestClient _restClient;
+        private readonly RestClient _mantleRestClient;
+        private readonly MantleConfig _mantleConfig;
 
-        public EnergyCreditsController()
+        public EnergyCreditsController(RestClient mantleRestClient, MantleConfig mantleConfig)
         {
-            var client = new RestClient
-            {
-                BaseUrl = new Uri("https://develop.api.mantleblockchain.com")
-            };
-            client.AddDefaultHeader("Content-type", "application/json; charset=utf-8");
-            client.AddDefaultHeader("x-api-key", "2weTDCXLAJyLF90oTiaL1iDIYghuNhe1XBZrQBAB2oI=");
-            _restClient = client;
-        }
-        
-        /// <summary>
-        /// Creates a renewable energy credit in Tracker. This credit will then be issuable and transferable.
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> EnergyCredit([FromBody] GreenEnergy greenEnergy)
-        {
-//            try
-//            {
-//                await _mantleTracker.TrackerAssetsPostAsync(new TrackerAssetCreateRequest(greenEnergy.Type));
-//                return StatusCode(StatusCodes.Status201Created);
-//            }
-//            catch (Exception e)
-//            {
-//                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-//            }
-            return Ok();
+            _mantleRestClient = mantleRestClient;
+            _mantleConfig = mantleConfig;
         }
 
         /// <summary>
-        /// Get all of the energy credits that have been created.
+        /// Get all of the energy energies that have been created.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-//            var assets = await _restClient.TrackerAssetsGetAsync();
-            
-            var request = new RestRequest("apikeys/all", Method.GET);
+            var request = new RestRequest($"tracker/{_mantleConfig.ProductId}/assets", Method.GET);
+            var response = await _mantleRestClient.ExecuteGetTaskAsync(request);
+            var greenEnergies = JsonConvert.DeserializeObject<IEnumerable<GreenEnergy>>(response.Content);
 
-            var response = _restClient.Execute(request);
-
-            return Ok();
+            return Ok(greenEnergies);
         }
         
+        
         /// <summary>
-        /// Get all of the energy credits that have been created.
+        /// Creates a new green energy in Tracker. You will be able to issue and transfer credits for this green energy.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpPost("{greenEnergyName}")]
+        public async Task<IActionResult> Create([FromRoute] string greenEnergyName)
         {
-//            var assets = await _restClient.TrackerAssetsGetAsync();
-            
-            var request = new RestRequest("apikeys/all", Method.GET);
+            var request = new RestRequest($"tracker/{_mantleConfig.ProductId}/assets", Method.POST);
+            request.AddJsonBody(new {name = greenEnergyName});
+            var response = await _mantleRestClient.ExecutePostTaskAsync(request);
 
-            var response = await _restClient.ExecuteGetTaskAsync(request);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return StatusCode((int) response.StatusCode, response.Content);
+            }
 
-            return Ok(response.Content);
-        }
-        
-        
-        
-        /// <summary>
-        /// Get all issue batch for an asset by id.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("assets/issuedbatches/{assetId}")]
-//        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAssetDetails(string assetId)
-        {
+            var createdGreenEnergy = JsonConvert.DeserializeObject<GreenEnergy>(response.Content);
+            return StatusCode((int) response.StatusCode, createdGreenEnergy);
 
-//            var issueBatch = await _mantleTracker.TrackerAssetsIssuedbatchesByAssetIdGetAsync(assetId);
-//            return Ok(issueBatch);
-            //            return StatusCode(StatusCodes.Status200OK);
-            return Ok();
         }
         
         /// <summary>
-        /// Issue a certain amount of asset to a recipient.
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("assets/issue")]
-//        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> AssetIssueAmount([FromBody] AssetIssueRequest asr)
-        {
-//            var assets = await _mediator.Send(new GetAssetsQuery(token.ClientId));
-//            Console.WriteLine(greenCredit);
-            
-//            try
-//            {
-//                await _mantleTracker.TrackerAssetsIssuePostAsync(
-//                    new TrackerAssetIssueRequest(asr.AssetId,asr.RecipientEmail,asr.Amount));
-//                return StatusCode(StatusCodes.Status204NoContent);
-//            }
-//            catch (Exception e)
-//            {
-//                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-//            }
-            return Ok();
-        }
-        /// <summary>
-        /// Get all of the assets that have been created in Tracker. Requires the Tracker Admin Role.
+        /// Get your balances from Tracker.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("balances")]
         public async Task<IActionResult> GetBalances()
         {
-//            var balances = await _mantleTracker.TrackerWalletDetailedbalancesGetAsync();
-//            return Ok(balances);
-            return Ok();
+            var request = new RestRequest($"tracker/{_mantleConfig.ProductId}/wallet/balances", Method.GET);
+            var response = await _mantleRestClient.ExecuteGetTaskAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return StatusCode((int) response.StatusCode, response.Content);
+            }
+
+            var balances = JsonConvert.DeserializeObject<IEnumerable<Balance>>(response.Content);
+            return Ok(balances);
         }
-        
+
         /// <summary>
-        /// Get all of the transactions that have been created in Tracker. Requires the Tracker Admin Role.
+        /// Get a green energy by its id.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("transactions")]
-        public async Task<IActionResult> GetTransactions()
-        {        
-//            var transactions = await _mantleTracker.TrackerTransactionsGetAsync();
-//            return Ok(transactions);
-            return Ok();
-        }        
-        
+        [Route("{greenEnergyId}")]
+        public async Task<IActionResult> GetGreenEnergyDetails([FromRoute] string greenEnergyId)
+        {
+            var request = new RestRequest($"tracker/{_mantleConfig.ProductId}/assets/{greenEnergyId}", Method.GET);
+            var response = await _mantleRestClient.ExecuteGetTaskAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return StatusCode((int) response.StatusCode, response.Content);
+            }
+
+            var greenEnergy = JsonConvert.DeserializeObject<GreenEnergy>(response.Content);
+            return Ok(greenEnergy);
+        }
+
         /// <summary>
-        /// Transfer a certain amount of your asset to a recipient.
+        /// Issue green credits
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        [Route("wallet/transfer")]
-//        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> TransferAssetAmount([FromBody] TransferRequest tr)
+        [HttpPost("issue")]
+        public async Task<IActionResult> Issue([FromBody] IssueRequest request)
         {
-//            var config = new Configuration
-//            {
-//                BasePath = "https://dev.api.mantle.services"
-//            };
-//            var auth = new AuthenticationApi(config);
-//            var userResponse =
-//                await auth.AuthenticationLoginPostAsync(new UserLoginRequest(
-//                    tr.SenderEmail, "Test1234"));
-//            config.AddDefaultHeader("Authorization", userResponse.AccessToken);
-//            var localTracker = new TrackerApi(config);
-//            
-//            try
-//            {
-//                await localTracker.TrackerWalletTransferPostAsync(
-//                    new TrackerTransferRequest(tr.RecipientEmail, tr.Amount, tr.AssetId));
-//                return StatusCode(StatusCodes.Status201Created);
-//            }
-//            catch (Exception e)
-//            {
-//                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-//            }
+            var restRequest = new RestRequest($"tracker/{_mantleConfig.ProductId}/assets/issue", Method.POST);
+            restRequest.AddJsonBody(request);
+            var response = await _mantleRestClient.ExecutePostTaskAsync(restRequest);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return StatusCode((int) response.StatusCode, response.Content);
+            }
+
+            return StatusCode((int) response.StatusCode);
+        }
+ 
+        [HttpPost]
+        [Route("transfer")]
+        public async Task<IActionResult> TransferGreenCredits([FromBody] TransferRequest request)
+        {
+            //TODO: Implement energy credits transfer
             return Ok();
         }
     }

@@ -3,7 +3,7 @@
     <headerbar/>
     <titlecard title="Producer"/>
     <div v-if="dataLoaded">
-      <datatable title="Green Credits" :elements="getGreenAssets" :labels="labels"/>
+      <datatable title="Green energy" :elements="getGreenAssets" :labels="labels"/>
     </div>
     <div v-else>
       <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
@@ -25,6 +25,7 @@
       titlecard,
     },
     data: () => ({
+      productId: '',
       greenAssets: null,
       dataLoaded: false,
       labels: [
@@ -50,18 +51,20 @@
             id: e.id,
             status: e.blockchainStatus,
             name: e.name,
-            creationDate: e.creationDate ? moment(e.creationDate).format('MMM Do YYYY, h:mm:ss a') : e.creationDate,
+            creationDate: e.blockchainStatus == "Confirmed" ? moment(e.creationDate).format('MMM Do YYYY, h:mm:ss a') : "N/A",
           };
         }); 
       }
     },
     methods: {
       fetchGreenAssets() {
-        apiService.getAssets()
-          .then(body => (this.greenAssets = body.data));
+        apiService.getGreenEnergies()
+          .then(body => {
+            (this.greenAssets = body.data)
+          });
       },
     },
-    mounted(){
+    mounted() {
       this.fetchGreenAssets();
     },
   };

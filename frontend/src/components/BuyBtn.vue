@@ -12,14 +12,12 @@
             </h3>
             <div class="md-layout-item md-small-size-100">
                 <md-field>
-                  <!-- <label for="energyType">Asset</label> -->
                   <label for="energyType">Currency</label>
                   <md-input type="text" id="currency" name="currency" readonly :value="`${selectedAsset.displayName}`"/>
                 </md-field>
                 <md-field>
                   <label for="availableQty">Available</label>
                   <md-input type="text" id="availableQty" name="availableQty" readonly :value="`${selectedAsset.remainingAmount}`"/>
-                  <!-- <span>{{ `Available: ${selectedAsset.amount} kWh` }}</span> -->
                 </md-field>
             </div>            
             <div class="md-layout md-gutter">
@@ -31,12 +29,6 @@
                         <span class="md-error" v-else>Invalid amount</span>                    
                     </md-field>                
                 </div>
-                <!-- <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="currency">Currency</label>
-                    <md-input type="text" id="currency" name="currency" readonly :value="`${selectedAsset.displayName}`"/>
-                  </md-field>     
-                </div> -->
             </div>
           </md-card-content>
         </md-card-area>
@@ -59,13 +51,6 @@
                     <span class="md-error">The asset is required</span>
                 </md-field>
             </div>
-
-            <!-- <md-field :class="getValidationClass('email')">
-                <label for="email">Email</label>
-                <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-                <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
-            </md-field> -->
             <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                     <md-field :class="getValidationClass('quantity')">
@@ -108,9 +93,6 @@
       <md-icon>call_received</md-icon>
       <span>buy</span>
     </md-button>
-    <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
-        <md-icon>add_circle_outline</md-icon> Create a green credit
-    </md-button> -->
   </div>
 </template>
 
@@ -184,35 +166,8 @@
         this.form.amount = null
         this.form.email = null
       },
-      issueAmount () {
-        this.form.currencyId = this.assetId;
-        this.sending = true
-        apiService.issueAmount(this.form)
-          .then(() => {            
-            this.assetCreated = true;
-            this.snackBarMsg = "Transfer success";
-            this.showSnackbar = true;
-            this.sending = false;
-            this.clearForm();
-          }).catch((error) => {
-            if (error.response) {
-                this.snackBarMsg = error.response.data;
-            } else if (error.request) {
-                this.snackBarMsg = error.request;
-            } else {
-                this.snackBarMsg = error.message;
-            }
-            this.showSnackbar = true;
-            this.sending = false;
-            this.clearForm();
-          });
-      },
       validateUser () {
         this.$v.$touch()
-
-        if (!this.$v.$invalid) {
-          // this.transferEnergy()
-        }
       },
     },
   };

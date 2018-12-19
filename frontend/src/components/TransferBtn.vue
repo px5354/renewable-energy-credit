@@ -6,13 +6,8 @@
       <md-card class="md-layout-item">
         <md-card-area md-inset>
           <md-card-content>
-            <!-- <h3 class="md-subheading">
-              <md-icon>call_made</md-icon>
-              Money to send
-            </h3> -->
             <div class="md-layout-item md-small-size-100">
                 <md-field>
-                  <!-- <label for="energyType">Asset</label> -->
                   <label for="asset">Asset</label>
                   <md-input type="text" id="asset" name="asset" readonly :value="`${selectedAsset.displayName}`"/>
                   <span class="md-suffix">{{ `Available: ${selectedAsset.remainingAmount}` }}</span>
@@ -27,12 +22,6 @@
                         <span class="md-error" v-else>Invalid amount</span>                    
                     </md-field>                
                 </div>
-                <!-- <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="currency">Currency</label>
-                    <md-input type="text" id="currency" name="currency" readonly :value="`${selectedAsset.displayName}`"/>
-                  </md-field>     
-                </div> -->
             </div>
           </md-card-content>
         </md-card-area>
@@ -60,9 +49,6 @@
     <md-button class="md-icon-button md-raised md-primary" @click="showDialog=true">
       <md-icon>call_made</md-icon>
     </md-button>
-    <!-- <md-button class="md-dense md-raised md-primary create-btn" @click="showDialog=true">
-        <md-icon>add_circle_outline</md-icon> Create a green credit
-    </md-button> -->
   </div>
 </template>
 
@@ -125,27 +111,7 @@
         this.form.recipientEmail = null
       },
       transferAmount () {
-        this.form.assetId = this.selectedAsset.id;
-        this.form.senderEmail = "pascalmaster62@gmail.com";
-        this.sending = true
-        apiService.transferAmount(this.form)
-          .then(() => {            
-            this.snackBarMsg = "Transfer successful";
-            this.showSnackbar = true;
-            this.sending = false;
-            this.clearForm();
-          }).catch((error) => {
-            if (error.response) {
-                this.snackBarMsg = error.response.data;
-            } else if (error.request) {
-                this.snackBarMsg = error.request;
-            } else {
-                this.snackBarMsg = error.message;
-            }
-            this.showSnackbar = true;
-            this.sending = false;
-            this.clearForm();
-          });
+
       },
       validateUser () {
         this.$v.$touch()
